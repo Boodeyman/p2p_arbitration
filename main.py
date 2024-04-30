@@ -1,8 +1,13 @@
 import requests
 from bs4 import BeautifulSoup
+import time
+from colorama import init, Fore, Back, Style
+
+init(autoreset=True)
 
 
 def get_data(url):
+    start_time = time.time()
     headers = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15"
     }
@@ -21,22 +26,27 @@ def get_data(url):
         coin_urls.append(coin_url)
         print(coin_url)
 
-    for coin_url in coin_urls[0:5]:
-        req = requests.get(coin_url, headers)
-        coin_name = coin_url.split("/")[-2]
+    coin_prices = [""] * 5  # Создаем список из 5 пустых строк для хранения цен
 
-        with open(f"data/{coin_name}.html", "w") as file:
-            file.write(req.text)
-        with open(f"data/{coin_name}.html") as file:
-            src = file.read()
+    while True:
+        for i, coin_url in enumerate(coin_urls[0:5]):
+            req = requests.get(coin_url, headers)
+            coin_name = coin_url.split("/")[-2]
 
-        soup = BeautifulSoup(src, "lxml")
-        coin_price = soup.find("span", class_="sc-f70bb44c-0 jxpCgO base-text").text
-        print(coin_price)
-        # coin_data = soup.find_all("div", class_="sc-500f568e-0 ejtlWy")
-        # rating_element = soup.find('div', {'el': 'sc-f70bb44c-0 jxpCgO base-text'})
-        # print(coin_data)
-        # print(rating_element)
+            with open(f"data/{coin_name}.html", "w") as file:
+                file.write(req.text)
+            with open(f"data/{coin_name}.html") as file:
+                src = file.read()
+
+            soup = BeautifulSoup(src, "lxml")
+            coin_price = soup.find("span", class_="sc-f70bb44c-0 jxpCgO base-text").text
+
+            coin_prices[
+                i] = f"{Fore.GREEN}{coin_name}{Fore.RESET}: {Fore.RED}{coin_price}{Fore.RESET}"  # Обновляем цену в списке
+
+        # Выводим все 5 цен на одной строке
+        print(f"\rCoin_prices: {' '.join(coin_prices)}", end="")
+        time.sleep(5)
 
 
 get_data("https://coinmarketcap.com/")
