@@ -1,0 +1,3 @@
+/Users/Admin/Desktop/HSE/p2p_arbitration_cpp/cmake-build-debug/CMakeFiles/p2p_arbitration_cpp.dir
+/Users/Admin/Desktop/HSE/p2p_arbitration_cpp/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/Admin/Desktop/HSE/p2p_arbitration_cpp/cmake-build-debug/CMakeFiles/rebuild_cache.dir
