@@ -57,4 +57,4 @@ while True:
 
     # Вывод всех данных на одной строке
     print("\r" + ' | '.join(output_lines), end="")
-    time.sleep(1)  # Пауза между обновлениями
+    time.sleep(1)
