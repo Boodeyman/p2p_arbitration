@@ -1,4 +1,4 @@
-import requests
+from curl_cffi import requests
 import time
 from colorama import init, Fore, Style
 

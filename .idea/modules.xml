@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/p2p_arbitration.iml" filepath="$PROJECT_DIR$/.idea/p2p_arbitration.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/p2p_arbitration2.iml" filepath="$PROJECT_DIR$/.idea/p2p_arbitration2.iml" />
     </modules>
   </component>
 </project>
