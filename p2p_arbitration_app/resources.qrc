@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/ADAUSDT.png</file>
+        <file>icons/ATOMUSDT.png</file>
+        <file>icons/BNBUSDT.png</file>
+        <file>icons/BTCUSDT.png</file>
+        <file>icons/DOGEUSDT.png</file>
+        <file>icons/ETHUSDT.png</file>
+        <file>icons/SOLUSDT.png</file>
+        <file>icons/XRPUSDT.png</file>
+    </qresource>
+</RCC>
