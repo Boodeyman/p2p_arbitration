@@ -6,6 +6,7 @@
 
 BinanceAPI::BinanceAPI(QObject *parent) : QObject(parent), manager(new QNetworkAccessManager(this)) {
     connect(manager, &QNetworkAccessManager::finished, this, &BinanceAPI::onReplyFinished);
+    this->scraper = nullptr;
 }
 
 void BinanceAPI::getCrypto(const QVector<QString> &cryptos) {
@@ -27,3 +28,6 @@ void BinanceAPI::onReplyFinished(QNetworkReply *reply) {
     reply->deleteLater();
 }
 
+void BinanceAPI::setScraper(Scraper *scraper){
+    this->scraper = scraper;
+}

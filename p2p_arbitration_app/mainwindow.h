@@ -11,6 +11,7 @@ class MainWindow;
 }
 
 class BinanceAPI;
+class Scraper;  // Добавьте это объявление
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -26,7 +27,9 @@ private slots:
 private:
     Ui::MainWindow *ui;
     BinanceAPI *api;
+    Scraper *scraper;  // Добавьте это объявление
     QTimer *timer;  // Timer for periodic updates
+    QTimer *proxyChangeTimer;  // Timer for changing proxies
     QMap<QString, int> symbolToRowMap;  // Maps cryptocurrency symbols to row indices
 
     void setupTableWidget();

@@ -1,6 +1,7 @@
 #ifndef BINANCE_H
 #define BINANCE_H
 
+#include "scraper.h"
 #include <QObject>
 #include <QVector>
 #include <QString>
@@ -14,7 +15,9 @@ class BinanceAPI : public QObject {
 
 public:
     explicit BinanceAPI(QObject *parent = nullptr);
-    void getCrypto(const QVector<QString> &cryptos);  // Updated to handle a list of symbols
+    void getCrypto(const QVector<QString> &cryptos);
+    void setScraper(Scraper *scraper);
+
 
 signals:
     void cryptoDataReady(const QString &symbol, const QJsonObject &data);
@@ -25,7 +28,7 @@ private slots:
 
 private:
     QNetworkAccessManager *manager;
+    Scraper *scraper;
 };
 
 #endif // BINANCE_H
-
