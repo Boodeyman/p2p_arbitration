@@ -18,5 +18,11 @@
         <file>icons/NEARUSDT.png</file>
         <file>icons/TRXUSDT.png</file>
         <file>icons/UNIUSDT.png</file>
+        <file>icons/APTUSDT.png</file>
+        <file>icons/ARUSDT.png</file>
+        <file>icons/IMXUSDT.png</file>
+        <file>icons/RNDRUSDT.png</file>
+        <file>icons/WIFUSDT.png</file>
+        <file>icons/XLMUSDT.png</file>
     </qresource>
 </RCC>
