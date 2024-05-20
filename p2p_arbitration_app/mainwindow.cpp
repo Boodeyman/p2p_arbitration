@@ -10,52 +10,55 @@ MainWindow::MainWindow(QWidget *parent)
     setupTableWidget();
     setupCryptoRows();
 
+    // Set up the scraper and API
+    api->setScraper(scraper);
+
     // Setup and start the data request QTimer
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::requestData);
-    timer->start(1000);
-
-    // Установка списка прокси
-    QVector<QString> proxies = {
-        "45.81.79.166:8000:EafVez:v36X6P"
-    };
-    scraper->setProxyList(proxies);
-    scraper->testIp();
+    timer->start(1000);  // Request data every 10 seconds (изменено с 1 секунды на 10 секунд)
 
     // Setup and start the proxy change QTimer
-    // proxyChangeTimer = new QTimer(this);  // Инициализируем proxyChangeTimer
-    // connect(proxyChangeTimer, &QTimer::timeout, scraper, &Scraper::scrapeSite);
-    // proxyChangeTimer->start(5000000);  // Менять прокси каждые 5 секунд
+    proxyChangeTimer = new QTimer(this);
+    connect(proxyChangeTimer, &QTimer::timeout, scraper, &Scraper::testIp);
+    proxyChangeTimer->start(60000);  // Change proxy every 10 minutes (изменено с 2 минут на 10 минут)
 
     connect(api, &BinanceAPI::cryptoDataReady, this, &MainWindow::updateCryptoData);
     connect(api, &BinanceAPI::errorOccurred, this, [](const QString &error) {
         qDebug() << "Network error:" << error;
     });
 
+    // Set the proxy list
+    QVector<QString> proxies = {
+        "196.17.249.47:8000:AYUP1R:wUKVAX",
+        "181.177.85.254:9758:rkMEWn:eD09JZ",
+        "45.85.162.169:8000:B5WASu:Td2uCw",
+        "45.130.126.84:8000:x3mGeU:DFxtuN",
+        "186.179.49.5:8000:7PmmyL:GwfamA"
+    };
+    scraper->setProxyList(proxies);
+    scraper->testIp();
+
     requestData();  // Perform initial data request
 }
 
 void MainWindow::requestData() {
-    QVector<QString> cryptos = {"BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "ATOMUSDT", "LTCUSDT", "SHIBUSDT"};
-    for (const QString &crypto : cryptos) {
-        QVector<QString> singleCrypto;  // Create a QVector to hold the single crypto symbol
-        singleCrypto.append(crypto);    // Add the current crypto symbol to the vector
-        api->getCrypto(singleCrypto);   // Pass the QVector to getCrypto
-    }
+    QVector<QString> cryptos = {"BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "ATOMUSDT", "LTCUSDT", "SHIBUSDT", "AVAXUSDT", "TRXUSDT", "DOTUSDT", "NEARUSDT", "MATICUSDT", "ICPUSDT", "UNIUSDT"};
+    api->getCrypto(cryptos);
 }
 
 void MainWindow::setupTableWidget() {
-    ui->tableWidget->setColumnCount(6);  // Increase the number of columns to include icon column
+    ui->tableWidget->setColumnCount(6);
     QStringList headers = {"", "Name", "Price", "Change", "Volume (USDT)", "Volume (Crypto)"};
     ui->tableWidget->setHorizontalHeaderLabels(headers);
 
     // Set widths for each column, adjust as needed
-    ui->tableWidget->setColumnWidth(0, 30);  // Width for icon column
-    ui->tableWidget->setColumnWidth(1, 100); // Name
-    ui->tableWidget->setColumnWidth(2, 80);  // Price
-    ui->tableWidget->setColumnWidth(3, 70);  // Change
-    ui->tableWidget->setColumnWidth(4, 150); // Volume (USDT)
-    ui->tableWidget->setColumnWidth(5, 150); // Volume (Crypto)
+    ui->tableWidget->setColumnWidth(0, 30);
+    ui->tableWidget->setColumnWidth(1, 100);
+    ui->tableWidget->setColumnWidth(2, 80);
+    ui->tableWidget->setColumnWidth(3, 70);
+    ui->tableWidget->setColumnWidth(4, 150);
+    ui->tableWidget->setColumnWidth(5, 150);
 
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
     ui->tableWidget->verticalHeader()->setVisible(false);
@@ -63,7 +66,7 @@ void MainWindow::setupTableWidget() {
 }
 
 void MainWindow::setupCryptoRows() {
-    QStringList cryptos = {"BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "ATOMUSDT", "LTCUSDT", "SHIBUSDT"};
+    QStringList cryptos = {"BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "ATOMUSDT", "LTCUSDT", "SHIBUSDT", "AVAXUSDT", "TRXUSDT", "DOTUSDT", "NEARUSDT", "MATICUSDT", "ICPUSDT", "UNIUSDT"};
     for (int i = 0; i < cryptos.size(); ++i) {
         symbolToRowMap[cryptos[i]] = i;
         ui->tableWidget->insertRow(i);
@@ -111,17 +114,13 @@ void MainWindow::updateCryptoData(const QString &symbol, const QJsonObject &data
         ui->tableWidget->setItem(row, 4, volumeUsdtItem);
         ui->tableWidget->setItem(row, 5, volumeCryptoItem);
     } else {
-        qDebug() << "Failed to receive valid data";
+        qDebug() << "Failed to receive valid data for symbol:" << symbol;
     }
 }
 
 MainWindow::~MainWindow() {
     delete ui;
 }
-
-
-
-
 
 
 

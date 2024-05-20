@@ -33,6 +33,7 @@ if(${QT_VERSION_MAJOR} VERSION_GREATER_EQUAL 6)
         icons/ADAUSDT.png icons/ATOMUSDT.png icons/BNBUSDT.png icons/BTCUSDT.png icons/DOGEUSDT.png icons/ETHUSDT.png icons/SOLUSDT.png icons/XRPUSDT.png
         resources.qrc
         icons/exit.png
+        icons/ADAUSDT.png icons/ATOMUSDT.png icons/AVAXUSDT.png icons/BNBUSDT.png icons/BTCUSDT.png icons/DOGEUSDT.png icons/DOTUSDT.png icons/ETHUSDT.png icons/exit.png icons/ICPUSDT.png icons/LTCUSDT.png icons/MATICUSDT.png icons/NEARUSDT.png icons/SHIBUSDT.png icons/SOLUSDT.png icons/TRXUSDT.png icons/UNIUSDT.png icons/XRPUSDT.png
     )
 else()
     if(ANDROID)
@@ -54,6 +55,8 @@ install(TARGETS p2p_arbitration_app
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(p2p_arbitration_app)
 endif()
+
+
 
 
 

@@ -3,8 +3,6 @@
 #include <QNetworkReply>
 #include <QJsonDocument>
 #include <QDebug>
-#include <QTimer>
-#include <random>
 
 Scraper::Scraper(QObject *parent)
     : QObject(parent), currentProxyIndex(0), manager(new QNetworkAccessManager(this)) {
@@ -12,61 +10,79 @@ Scraper::Scraper(QObject *parent)
 }
 
 void Scraper::setProxyList(const QVector<QString> &proxies) {
-    this->proxies = proxies;
+    this->proxyList = proxies;
 }
 
 void Scraper::testIp() {
     QString url = "https://api.ipify.org?format=json";
-    QString proxy = getNextProxy();
-    fetchUrl(url, proxy);
+    makeRequest(url, [](const QByteArray &data, bool success) {
+        if (success) {
+            qDebug() << "Test IP Response data:" << data;
+        } else {
+            qDebug() << "Test IP failed.";
+        }
+    });
 }
 
-QString Scraper::makeRequest(const QString &url) {
-    QString proxy = getNextProxy();
-    return fetchUrl(url, proxy);
-}
-
-QString Scraper::getRandomProxy() {
-    if (proxies.isEmpty()) return QString();
-    static std::mt19937 rng(std::random_device{}());
-    std::uniform_int_distribution<int> dist(0, proxies.size() - 1);
-    return proxies.at(dist(rng));
+void Scraper::makeRequest(const QString &url, std::function<void(const QByteArray &, bool)> callback) {
+    currentCallback = callback;
+    fetchUrl(url);
 }
 
 QString Scraper::getNextProxy() {
-    if (proxies.isEmpty()) return QString();
-    currentProxyIndex = (currentProxyIndex + 1) % proxies.size();
-    return proxies.at(currentProxyIndex);
+    if (proxyList.isEmpty()) return QString();
+    currentProxyIndex = (currentProxyIndex + 1) % proxyList.size();
+    return proxyList.at(currentProxyIndex);
 }
 
-QString Scraper::fetchUrl(const QString &url, const QString &proxy) {
+void Scraper::fetchUrl(const QString &url, int retryCount) {
+    QString proxy = getNextProxy();
     QNetworkRequest request((QUrl(url)));
+
     if (!proxy.isEmpty()) {
         QNetworkProxy networkProxy;
-        networkProxy.setType(QNetworkProxy::Socks5Proxy);
+        networkProxy.setType(QNetworkProxy::HttpProxy);
         QStringList proxyParts = proxy.split(':');
         networkProxy.setHostName(proxyParts[0]);
         networkProxy.setPort(proxyParts[1].toUInt());
-        networkProxy.setUser(proxyParts[2]);
-        networkProxy.setPassword(proxyParts[3]);
+        if (proxyParts.size() > 2) {
+            networkProxy.setUser(proxyParts[2]);
+            networkProxy.setPassword(proxyParts[3]);
+        }
         manager->setProxy(networkProxy);
-        qDebug() << "New proxy: " << proxy;
+        qDebug() << "Using proxy:" << proxy;
     } else {
         manager->setProxy(QNetworkProxy::NoProxy);
-        qDebug() << "New proxy: null";
+        qDebug() << "Using no proxy";
     }
+
     QNetworkReply *reply = manager->get(request);
-    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
-        onNetworkReply(reply);
-    });
-    return QString();
+    retryCountMap[reply] = retryCount;
 }
 
 void Scraper::onNetworkReply(QNetworkReply *reply) {
-    if (reply->error() != QNetworkReply::NoError) {
-        qDebug() << "Request failed with proxy" << manager->proxy().hostName() << ":" << reply->errorString();
+    QByteArray data = reply->readAll();
+    int retryCount = retryCountMap[reply];
+    bool success = (reply->error() == QNetworkReply::NoError) && !data.isEmpty();
+
+    if (!success) {
+        qDebug() << "Request failed or returned empty data with proxy" << manager->proxy().hostName() << ":" << reply->errorString();
+        if (retryCount < maxRetries) {
+            qDebug() << "Retrying... Attempt:" << retryCount + 1;
+            fetchUrl(reply->url().toString(), retryCount + 1);
+        } else {
+            qDebug() << "Max retries reached. Giving up.";
+            if (currentCallback) {
+                currentCallback(data, false);
+            }
+        }
     } else {
-        qDebug() << "HTML Content fetched:" << reply->readAll();
+        qDebug() << "Response data:" << data;
+        if (currentCallback) {
+            currentCallback(data, true);
+        }
     }
+
+    retryCountMap.remove(reply);
     reply->deleteLater();
 }

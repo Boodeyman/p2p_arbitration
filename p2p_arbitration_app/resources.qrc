@@ -11,5 +11,12 @@
         <file>icons/exit.png</file>
         <file>icons/SHIBUSDT.png</file>
         <file>icons/LTCUSDT.png</file>
+        <file>icons/AVAXUSDT.png</file>
+        <file>icons/DOTUSDT.png</file>
+        <file>icons/ICPUSDT.png</file>
+        <file>icons/MATICUSDT.png</file>
+        <file>icons/NEARUSDT.png</file>
+        <file>icons/TRXUSDT.png</file>
+        <file>icons/UNIUSDT.png</file>
     </qresource>
 </RCC>

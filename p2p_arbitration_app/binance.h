@@ -6,9 +6,8 @@
 #include <QVector>
 #include <QString>
 #include <QJsonObject>
-
-class QNetworkAccessManager;
-class QNetworkReply;
+#include <QMap>
+#include <QNetworkProxy>
 
 class BinanceAPI : public QObject {
     Q_OBJECT
@@ -18,7 +17,6 @@ public:
     void getCrypto(const QVector<QString> &cryptos);
     void setScraper(Scraper *scraper);
 
-
 signals:
     void cryptoDataReady(const QString &symbol, const QJsonObject &data);
     void errorOccurred(const QString &error);
@@ -27,8 +25,15 @@ private slots:
     void onReplyFinished(QNetworkReply *reply);
 
 private:
-    QNetworkAccessManager *manager;
+    void setNextProxy();
+
+    QMap<QString, int> retryCountMap;
+    const int maxRetries = 3;
+    int pendingRequests;
     Scraper *scraper;
+    QNetworkAccessManager *manager;
+    QVector<QNetworkProxy> proxyList;
+    int currentProxyIndex;
 };
 
 #endif // BINANCE_H
