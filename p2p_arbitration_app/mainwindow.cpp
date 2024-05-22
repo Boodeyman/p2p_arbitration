@@ -2,7 +2,11 @@
 #include "ui_mainwindow.h"
 #include "binance.h"
 #include "scraper.h"
+#include "hoverbutton.h"
 #include <QLabel>
+#include <QMessageBox>
+#include <QEvent>
+#include <QMouseEvent>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), api(new BinanceAPI(this)), scraper(new Scraper(this)) {
@@ -10,25 +14,32 @@ MainWindow::MainWindow(QWidget *parent)
     setupTableWidget();
     setupCryptoRows();
 
-    // Set up the scraper and API
+    // Добавление HoverButton виджета с существующим lineEdit
+    hoverButton = new HoverButton(ui->hoverButton, ui->lineEdit, this);
+    ui->verticalLayout->addWidget(hoverButton);
+
+    // Установите фильтр событий
+    this->installEventFilter(this);
+
+    // Настройка scraper и API
     api->setScraper(scraper);
 
-    // Setup and start the data request QTimer
+    // Настройка и запуск таймера для запроса данных
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::requestData);
-    timer->start(1000);  // Request data every 10 seconds (изменено с 1 секунды на 10 секунд)
+    timer->start(1000);  // Запрос данных каждую секунду
 
-    // Setup and start the proxy change QTimer
+    // Настройка и запуск таймера для смены прокси
     proxyChangeTimer = new QTimer(this);
     connect(proxyChangeTimer, &QTimer::timeout, scraper, &Scraper::testIp);
-    proxyChangeTimer->start(60000);  // Change proxy every 10 minutes (изменено с 2 минут на 10 минут)
+    proxyChangeTimer->start(90000);  // Смена прокси каждые 1.5 минуты
 
     connect(api, &BinanceAPI::cryptoDataReady, this, &MainWindow::updateCryptoData);
     connect(api, &BinanceAPI::errorOccurred, this, [](const QString &error) {
         // qDebug() << "Network error:" << error;
     });
 
-    // Set the proxy list
+    // Установка списка прокси
     QVector<QString> proxies = {
         "196.17.249.47:8000:AYUP1R:wUKVAX",
         "196.17.67.75:8000:yzbLcj:sn5tVm",
@@ -38,17 +49,67 @@ MainWindow::MainWindow(QWidget *parent)
         "45.85.162.169:8000:B5WASu:Td2uCw",
         "138.219.72.205:8000:PhE4fP:nz05nG",
         "138.219.72.122:8000:PhE4fP:nz05nG",
-        "200.10.36.42:8000:PhE4fP:nz05nG",
-        "168.181.52.14:8000:PhE4fP:nz05nG"
+        "200.10.36.42:8000:PhE4fP:nз05nG",
+        "168.181.52.14:8000:PhE4fP:nз05nG"
     };
     scraper->setProxyList(proxies);
     scraper->testIp();
 
-    requestData();  // Perform initial data request
+    connect(ui->lineEdit, &QLineEdit::textChanged, this, &MainWindow::searchCrypto);
+    connect(ui->tableWidget, &QTableWidget::itemSelectionChanged, this, &MainWindow::onRowSelected);
+
+    requestData();  // Выполните первоначальный запрос данных
+
+    ui->pushButton->setStyleSheet(
+        "QPushButton:hover { "
+        "   color: yellow; "  // Состояние при наведении
+        "}"
+        );
+    ui->pushButton_2->setStyleSheet(
+        "QPushButton:hover { "
+        "   color: yellow; "  // Состояние при наведении
+        "}"
+        );
+}
+
+bool MainWindow::eventFilter(QObject *watched, QEvent *event) {
+    if (event->type() == QEvent::MouseButtonPress) {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+        if (!hoverButton->rect().contains(mouseEvent->pos())) {
+            ui->lineEdit->setVisible(false);
+        }
+    }
+    return QMainWindow::eventFilter(watched, event);
+}
+
+void MainWindow::searchCrypto() {
+    QString searchQuery = ui->lineEdit->text().trimmed().toUpper();  // Преобразовать в верхний регистр для нечувствительности к регистру
+    bool found = false;
+
+    for (int i = 0; i < ui->tableWidget->rowCount(); ++i) {
+        bool rowMatch = false;  // Отслеживание, есть ли совпадение в текущей строке
+        QTableWidgetItem *item = ui->tableWidget->item(i, 1);  // Предполагая, что названия монет во втором столбце
+
+        if (item->text().toUpper().contains(searchQuery)) {
+            rowMatch = true;
+        }
+
+        ui->tableWidget->setRowHidden(i, !rowMatch);  // Скрыть строки без совпадений
+    }
+}
+
+void MainWindow::onRowSelected() {
+    QList<QTableWidgetItem*> selection = ui->tableWidget->selectedItems();
+    if (!selection.isEmpty()) {
+        QTableWidgetItem* item = selection.first();  // Получить первый элемент из выделения
+        int row = item->row();  // Получить индекс строки
+        // Выполните логику с выбранной строкой
+        QMessageBox::information(this, "Выбранная монета", "Вы выбрали: " + ui->tableWidget->item(row, 1)->text());
+    }
 }
 
 void MainWindow::requestData() {
-    QVector<QString> cryptos = {"BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "ATOMUSDT", "LTCUSDT", "SHIBUSDT", "AVAXUSDT", "TRXUSDT", "DOTUSDT", "NEARUSDT", "MATICUSDT", "ICPUSDT", "UNIUSDT", "RNDRUSDT", "APTUSDT", "IMXUSDT", "ARUSDT", "XLMUSDT", "WIFUSDT"};
+    QVector<QString> cryptos = {"BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "ATOMUSDT", "LTCUSDT", "SHIBUSDT", "AVAXUSDT", "TRXUSDT", "DOTUSDT", "NEARUSDT", "MATICUSDT", "ICPUSDT", "UNIUSDT", "RNDRUSDT", "APTUSDT", "IMXUSDT", "ARUSDT", "XLMUSDT", "WIFUSDT", "FTMUSDT", "OPUSDT", "TAOUSDT", "SUIUSDT", "INJUSDT", "RUNEUSDT", "FLOKIUSDT", "SEIUSDT"};
     api->getCrypto(cryptos);
 }
 
@@ -57,7 +118,7 @@ void MainWindow::setupTableWidget() {
     QStringList headers = {"", "Name", "Price", "Change", "Volume (USDT)", "Volume (Crypto)"};
     ui->tableWidget->setHorizontalHeaderLabels(headers);
 
-    // Set widths for each column, adjust as needed
+    // Установите ширину для каждого столбца, при необходимости скорректируйте
     ui->tableWidget->setColumnWidth(0, 30);
     ui->tableWidget->setColumnWidth(1, 100);
     ui->tableWidget->setColumnWidth(2, 80);
@@ -71,7 +132,7 @@ void MainWindow::setupTableWidget() {
 }
 
 void MainWindow::setupCryptoRows() {
-    QStringList cryptos = {"BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "ATOMUSDT", "LTCUSDT", "SHIBUSDT", "AVAXUSDT", "TRXUSDT", "DOTUSDT", "NEARUSDT", "MATICUSDT", "ICPUSDT", "UNIUSDT", "RNDRUSDT", "APTUSDT", "IMXUSDT", "ARUSDT", "XLMUSDT", "WIFUSDT"};
+    QStringList cryptos = {"BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "ATOMUSDT", "LTCUSDT", "SHIBUSDT", "AVAXUSDT", "TRXUSDT", "DOTUSDT", "NEARUSDT", "MATICUSDT", "ICPUSDT", "UNIUSDT", "RNDRUSDT", "APTUSDT", "IMXUSDT", "ARUSDT", "XLMUSDT", "WIFUSDT", "FTMUSDT", "OPUSDT", "TAOUSDT", "SUIUSDT", "INJUSDT", "RUNEUSDT", "FLOKIUSDT", "SEIUSDT"};
     for (int i = 0; i < cryptos.size(); ++i) {
         symbolToRowMap[cryptos[i]] = i;
         ui->tableWidget->insertRow(i);
@@ -80,7 +141,7 @@ void MainWindow::setupCryptoRows() {
 
 void MainWindow::updateCryptoData(const QString &symbol, const QJsonObject &data) {
     if (data["success"].toBool()) {
-        if (!symbolToRowMap.contains(symbol)) return;  // Only update if we track this symbol
+        if (!symbolToRowMap.contains(symbol)) return;  // Обновляйте только если отслеживаем этот символ
         int row = symbolToRowMap[symbol];
 
         QJsonObject details = data["data"].toObject();
@@ -93,13 +154,13 @@ void MainWindow::updateCryptoData(const QString &symbol, const QJsonObject &data
         QString volumeInUSDTFormatted = "$" + QString::number(volumeInUSDT, 'f', 2);
         QString volumeInCryptoFormatted = QString::number(details["v"].toString().toDouble(), 'f', 2);
 
-        // Create and configure QLabel for the icon
+        // Создайте и настройте QLabel для иконки
         QLabel *iconLabel = new QLabel;
-        QPixmap iconPixmap(QString("://icons/icons/%1.png").arg(symbol));  // Assuming icons are named after the symbols
+        QPixmap iconPixmap(QString("://icons/icons/%1.png").arg(symbol));  // Предполагается, что иконки названы по символам
         iconLabel->setPixmap(iconPixmap.scaled(24, 24, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         iconLabel->setAlignment(Qt::AlignCenter);
 
-        // Create items with centered alignment
+        // Создайте элементы с центровкой
         QTableWidgetItem *nameItem = new QTableWidgetItem(assetName);
         nameItem->setTextAlignment(Qt::AlignCenter);
         QTableWidgetItem *priceItem = new QTableWidgetItem(currentPriceFormatted);
@@ -111,15 +172,22 @@ void MainWindow::updateCryptoData(const QString &symbol, const QJsonObject &data
         QTableWidgetItem *volumeCryptoItem = new QTableWidgetItem(volumeInCryptoFormatted);
         volumeCryptoItem->setTextAlignment(Qt::AlignCenter);
 
-        // Set QLabel and other items in the table
-        ui->tableWidget->setCellWidget(row, 0, iconLabel);  // Set QLabel as the cell widget for icons
+        // Установите цвет в зависимости от changePercent
+        if (changePercent < 0) {
+            changeItem->setForeground(QColor(Qt::red));
+        } else {
+            changeItem->setForeground(QColor(Qt::green));
+        }
+
+        // Установите QLabel и другие элементы в таблице
+        ui->tableWidget->setCellWidget(row, 0, iconLabel);  // Установите QLabel как виджет ячейки для иконок
         ui->tableWidget->setItem(row, 1, nameItem);
         ui->tableWidget->setItem(row, 2, priceItem);
         ui->tableWidget->setItem(row, 3, changeItem);
         ui->tableWidget->setItem(row, 4, volumeUsdtItem);
         ui->tableWidget->setItem(row, 5, volumeCryptoItem);
     } else {
-        // qDebug() << "Failed to receive valid data for symbol:" << symbol;
+        // qDebug() << "Не удалось получить корректные данные для символа:" << symbol;
     }
 }
 

@@ -7,6 +7,7 @@
 #include <QTimer>
 #include "binance.h"
 #include "scraper.h"
+#include "hoverbutton.h"
 
 namespace Ui {
 class MainWindow;
@@ -19,17 +20,25 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
 private slots:
     void updateCryptoData(const QString &symbol, const QJsonObject &data);
     void requestData();  // Slot to request data periodically
+    void searchCrypto();
+    void onRowSelected();
 
 private:
     Ui::MainWindow *ui;
     BinanceAPI *api;
-    Scraper *scraper;  // Убедитесь, что объявление присутствует
-    QTimer *timer;  // Timer for periodic updates
-    QTimer *proxyChangeTimer;  // Timer for changing proxies
-    QMap<QString, int> symbolToRowMap;  // Maps cryptocurrency symbols to row indices
+    Scraper *scraper;
+    QTimer *timer;  // Таймер для периодических обновлений
+    QTimer *proxyChangeTimer;  // Таймер для смены прокси
+    QMap<QString, int> symbolToRowMap;  // Соответствие символов криптовалют строкам
+
+    HoverButton *hoverButton;
+    QLineEdit *lineEdit; // Объявляем lineEdit
 
     void setupTableWidget();
     void setupCryptoRows();
