@@ -7,6 +7,8 @@
 #include <QMessageBox>
 #include <QEvent>
 #include <QMouseEvent>
+#include <QFile>
+#include <QTextStream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), api(new BinanceAPI(this)), scraper(new Scraper(this)) {
@@ -23,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::requestData);
-    timer->start(2000);
+    timer->start(1000);
 
     proxyChangeTimer = new QTimer(this);
     connect(proxyChangeTimer, &QTimer::timeout, scraper, &Scraper::testIp);
@@ -34,20 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
         // Handle error
     });
 
-    QVector<QString> proxies = {
-        "196.17.249.47:8000:AYUP1R:wUKVAX",
-        "196.17.67.75:8000:yzbLcj:sn5tVm",
-        "45.130.126.84:8000:x3mGeU:DFxtuN",
-        "181.177.85.254:9758:rkMEWn:eD09JZ",
-        "186.179.49.5:8000:7PmmyL:GwfamA",
-        "45.85.162.169:8000:B5WASu:Td2uCw",
-        "138.219.72.205:8000:PhE4fP:nz05nG",
-        "138.219.72.122:8000:PhE4fP:nz05nG",
-        "200.10.36.42:8000:PhE4fP:nз05nG",
-        "168.181.52.14:8000:PhE4fP:nз05nG"
-    };
-    scraper->setProxyList(proxies);
-    scraper->testIp();
+    loadProxiesFromFile();  // Загрузка прокси-серверов из файла
 
     connect(ui->lineEdit, &QLineEdit::textChanged, this, &MainWindow::searchCrypto);
     connect(ui->tableWidget, &QTableWidget::itemSelectionChanged, this, &MainWindow::onRowSelected);
@@ -187,6 +176,23 @@ void MainWindow::sortByChangeColumn(int column) {
         ui->tableWidget->sortByColumn(column, ascending ? Qt::AscendingOrder : Qt::DescendingOrder);
         ascending = !ascending;
     }
+}
+
+void MainWindow::loadProxiesFromFile() {
+    QFile file("/Users/Admin/Desktop/HSE/p2p_fullparsing/p2p_arbitration_app/proxies.txt"); // Если файл в ресурсах, используйте :/proxies.txt. Если нет, укажите правильный путь.
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox::critical(this, "Error", "Failed to open proxies.txt file");
+        return;
+    }
+    QTextStream in(&file);
+    QVector<QString> proxies;
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        proxies.append(line);
+    }
+    file.close();
+    scraper->setProxyList(proxies);
+    scraper->testIp();
 }
 
 MainWindow::~MainWindow() {

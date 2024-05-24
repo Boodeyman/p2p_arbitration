@@ -43,6 +43,7 @@ private:
 
     void setupTableWidget();
     void setupCryptoRows();
+    void loadProxiesFromFile();
 };
 
 #endif // MAINWINDOW_H

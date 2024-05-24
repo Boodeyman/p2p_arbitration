@@ -26,6 +26,7 @@ private slots:
 
 private:
     void setNextProxy();
+    void loadProxiesFromFile();
 
     QMap<QString, int> retryCountMap;
     const int maxRetries = 3;
