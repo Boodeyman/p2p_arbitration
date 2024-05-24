@@ -25,20 +25,21 @@ protected:
 
 private slots:
     void updateCryptoData(const QString &symbol, const QJsonObject &data);
-    void requestData();  // Slot to request data periodically
+    void requestData();
     void searchCrypto();
     void onRowSelected();
+    void sortByChangeColumn(int column); // New slot for sorting
 
 private:
     Ui::MainWindow *ui;
     BinanceAPI *api;
     Scraper *scraper;
-    QTimer *timer;  // Таймер для периодических обновлений
-    QTimer *proxyChangeTimer;  // Таймер для смены прокси
-    QMap<QString, int> symbolToRowMap;  // Соответствие символов криптовалют строкам
+    QTimer *timer;
+    QTimer *proxyChangeTimer;
+    QMap<QString, int> symbolToRowMap;
 
     HoverButton *hoverButton;
-    QLineEdit *lineEdit; // Объявляем lineEdit
+    QLineEdit *lineEdit;
 
     void setupTableWidget();
     void setupCryptoRows();
