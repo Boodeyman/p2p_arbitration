@@ -17,9 +17,9 @@ void Scraper::testIp() {
     QString url = "https://api.ipify.org?format=json";
     makeRequest(url, [](const QByteArray &data, bool success) {
         if (success) {
-            qDebug() << "Test IP Response data:" << data;
+            // qDebug() << "Test IP Response data:" << data;
         } else {
-            qDebug() << "Test IP failed.";
+            // qDebug() << "Test IP failed.";
         }
     });
 }
