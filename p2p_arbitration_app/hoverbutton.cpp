@@ -2,7 +2,7 @@
 #include <QVBoxLayout>
 
 HoverButton::HoverButton(QPushButton *button, QLineEdit *lineEdit, QWidget *parent)
-    : QWidget(parent), button(button), lineEdit(lineEdit), hoverText(""), defaultIcon(QIcon("://icons/icons/hoverbuttonicon.png")) {
+    : QWidget(parent), button(button), lineEdit(lineEdit), hoverText(""), defaultIcon(QIcon("://icons/icons/searchLine.png")) {
     this->button->setIcon(defaultIcon); // Установите начальную иконку
     lineEdit->setVisible(false); // Изначально скрыть QLineEdit
     lineEdit->setFixedHeight(button->sizeHint().height()); // Установить фиксированную высоту для предотвращения сдвигов

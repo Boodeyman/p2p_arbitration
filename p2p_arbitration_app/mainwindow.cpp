@@ -9,10 +9,49 @@
 #include <QMouseEvent>
 #include <QFile>
 #include <QTextStream>
+#include <QTimer>
+
+// Функция для установки темного стиля
+void setDarkStyle(QWidget *widget) {
+    QPalette darkPalette;
+
+    // Настройка цветов для всего приложения
+    darkPalette.setColor(QPalette::Window, QColor("#16181c"));
+    darkPalette.setColor(QPalette::WindowText, QColor(204, 204, 204));
+    darkPalette.setColor(QPalette::Base, QColor("#16181c"));
+    darkPalette.setColor(QPalette::AlternateBase, QColor(22, 24, 28));
+    darkPalette.setColor(QPalette::ToolTipBase, QColor(204, 204, 204));
+    darkPalette.setColor(QPalette::ToolTipText, QColor(204, 204, 204));
+    darkPalette.setColor(QPalette::Text, QColor(204, 204, 204));
+    darkPalette.setColor(QPalette::Button, QColor(62, 62, 62));
+    darkPalette.setColor(QPalette::ButtonText, QColor(255, 255, 255));
+    darkPalette.setColor(QPalette::BrightText, QColor(255, 0, 0));
+    darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
+
+    darkPalette.setColor(QPalette::Highlight, QColor(50, 60, 90));
+    darkPalette.setColor(QPalette::HighlightedText, QColor(204, 204, 204));
+
+    widget->setPalette(darkPalette);
+
+    // Настройка таблицы
+    // auto tableWidget = widget->findChild<QTableWidget*>();
+    // if (tableWidget) {
+    //     tableWidget->setStyleSheet("QTableWidget { background-color: #1E1E1E; color: #CCCCCC; alternate-background-color: #2E2E2E; gridline-color: #3E3E3E; }"
+    //                                "QHeaderView::section { background-color: #2E2E2E; color: #CCCCCC; border: 1px solid #3E3E3E; }");
+    // }
+
+    // Настройка кнопок
+    // auto buttons = widget->findChildren<QPushButton*>();
+    // for (auto button : buttons) {
+    //     button->setStyleSheet("QPushButton { background-color: #3E3E3E; color: #FFFFFF; border: none; padding: 5px; }"
+    //                           "QPushButton:hover { background-color: #5E5E5E; }");
+    // }
+}
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), api(new BinanceAPI(this)), scraper(new Scraper(this)) {
     ui->setupUi(this);
+
     setupTableWidget();
     setupCryptoRows();
 
@@ -25,7 +64,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::requestData);
-    timer->start(1000);
+    timer->start(2000);
 
     proxyChangeTimer = new QTimer(this);
     connect(proxyChangeTimer, &QTimer::timeout, scraper, &Scraper::testIp);
@@ -49,6 +88,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->pushButton_2->setStyleSheet(
         "QPushButton:hover { color: yellow; }"
         );
+
+    // Применение темной темы
+    setDarkStyle(this);
 }
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *event) {
@@ -93,11 +135,14 @@ void MainWindow::requestData() {
 
 void MainWindow::setupTableWidget() {
     ui->tableWidget->setColumnCount(6);
-    QStringList headers = {"", "Name", "Price", "Change", "Volume (USDT)", "Volume (Crypto)"};
+    QStringList headers = {"", "NAME", "PRICE", "CHANGE", "VOLUME (USDT)", "VOLUME (Crypto)"};
     ui->tableWidget->setHorizontalHeaderLabels(headers);
+    ui->tableWidget->horizontalHeader()->setStyleSheet(
+        "QHeaderView::section { background-color: #16181c; color: #ffffff; }"
+        );
 
     ui->tableWidget->setColumnWidth(0, 30);
-    ui->tableWidget->setColumnWidth(1, 100);
+    ui->tableWidget->setColumnWidth(1, 200);
     ui->tableWidget->setColumnWidth(2, 80);
     ui->tableWidget->setColumnWidth(3, 70);
     ui->tableWidget->setColumnWidth(4, 150);
@@ -129,6 +174,8 @@ void MainWindow::updateCryptoData(const QString &symbol, const QJsonObject &data
 
         QJsonObject details = data["data"].toObject();
         QString assetName = details["an"].toString();
+        QString symbolCode = symbol.left(symbol.indexOf("USDT")).toUpper();
+        QString fullName = QString("%1 (%2)").arg(assetName).arg(symbolCode);
         double currentPrice = details["c"].toString().toDouble();
         QString currentPriceFormatted = "$" + QString::number(currentPrice, 'f', 2);
         double changePercent = (currentPrice - details["o"].toString().toDouble()) / details["o"].toString().toDouble() * 100;
@@ -142,8 +189,9 @@ void MainWindow::updateCryptoData(const QString &symbol, const QJsonObject &data
         iconLabel->setPixmap(iconPixmap.scaled(24, 24, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         iconLabel->setAlignment(Qt::AlignCenter);
 
-        QTableWidgetItem *nameItem = new QTableWidgetItem(assetName);
+        QTableWidgetItem *nameItem = new QTableWidgetItem(fullName);
         nameItem->setTextAlignment(Qt::AlignCenter);
+        nameItem->setFont(QFont("Arial", 14)); // Устанавливаем жирный шрифт
         QTableWidgetItem *priceItem = new QTableWidgetItem(currentPriceFormatted);
         priceItem->setTextAlignment(Qt::AlignCenter);
         QTableWidgetItem *changeItem = new QTableWidgetItem(changeFormatted);
@@ -179,7 +227,7 @@ void MainWindow::sortByChangeColumn(int column) {
 }
 
 void MainWindow::loadProxiesFromFile() {
-    QFile file("/Users/Admin/Desktop/HSE/p2p_fullparsing/p2p_arbitration_app/proxies.txt"); // Если файл в ресурсах, используйте :/proxies.txt. Если нет, укажите правильный путь.
+    QFile file("/Users/Admin/Desktop/HSE/p2p_fullparsing/p2p_arbitration_app/proxies.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox::critical(this, "Error", "Failed to open proxies.txt file");
         return;

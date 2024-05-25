@@ -33,5 +33,6 @@
         <file>icons/TAOUSDT.png</file>
         <file>icons/SUIUSDT.png</file>
         <file>icons/hoverbuttonicon.png</file>
+        <file>icons/searchLine.png</file>
     </qresource>
 </RCC>

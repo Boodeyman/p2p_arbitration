@@ -41,6 +41,7 @@ if(${QT_VERSION_MAJOR} VERSION_GREATER_EQUAL 6)
         hoverbutton.h hoverbutton.cpp
 icons/hoverbuttonicon.png
 proxies.txt
+
     )
 else()
     if(ANDROID)
