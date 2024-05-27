@@ -10,7 +10,6 @@
 #include <QFile>
 #include <QTextStream>
 #include <QTimer>
-#include <QVBoxLayout>
 
 void setDarkStyle(QWidget *widget) {
     QPalette darkPalette;
@@ -75,8 +74,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     requestData();
 
-    ui->pushButton->setStyleSheet("QPushButton:hover { color: yellow; }");
-    ui->pushButton_2->setStyleSheet("QPushButton:hover { color: yellow; }");
+    ui->pushButton->setStyleSheet("QPushButton:hover { color: #eba613; }");
+    ui->pushButton_2->setStyleSheet("QPushButton:hover { color: #eba613; }");
 
     setDarkStyle(this);
 
@@ -99,7 +98,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event) {
             ui->lineEdit->setVisible(true);
             hideTimer->stop();  // Останавливаем таймер, если он запущен
         } else if (event->type() == QEvent::Leave) {
-            hideTimer->start(1000);  // Запускаем таймер на 1 секунду
+            hideTimer->start(250);  // Запускаем таймер на 0.25 секунду
         }
     } else if (event->type() == QEvent::MouseButtonPress) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);

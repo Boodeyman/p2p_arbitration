@@ -37,5 +37,7 @@
         <file>icons/logout.png</file>
         <file>icons/interface.png</file>
         <file>icons/logout_1.png</file>
+        <file>icons/icon_of_app.png</file>
+        <file>icons/icon_of_app_1.png</file>
     </qresource>
 </RCC>

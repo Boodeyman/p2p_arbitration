@@ -47,6 +47,8 @@ if(${QT_VERSION_MAJOR} VERSION_GREATER_EQUAL 6)
         icons/logout.png
         icons/interface.png
         icons/logout_1.png
+        icons/icon_of_app.png
+        icons/icon_of_app_1.png
     )
 else()
     if(ANDROID)
