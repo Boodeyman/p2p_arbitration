@@ -5,9 +5,9 @@
 #include <QJsonObject>
 #include <QMap>
 #include <QTimer>
+
 #include "binance.h"
 #include "scraper.h"
-#include "hoverbutton.h"
 
 namespace Ui {
 class MainWindow;
@@ -28,7 +28,9 @@ private slots:
     void requestData();
     void searchCrypto();
     void onRowSelected();
-    void sortByChangeColumn(int column); // New slot for sorting
+    void sortByChangeColumn(int column);
+    void logout();
+    void hideLineEdit();
 
 private:
     Ui::MainWindow *ui;
@@ -36,15 +38,12 @@ private:
     Scraper *scraper;
     QTimer *timer;
     QTimer *proxyChangeTimer;
+    QTimer *hideTimer;  // Таймер для скрытия lineEdit
     QMap<QString, int> symbolToRowMap;
-
-    HoverButton *hoverButton;
-    QLineEdit *lineEdit;
 
     void setupTableWidget();
     void setupCryptoRows();
     void loadProxiesFromFile();
-
 };
 
 #endif // MAINWINDOW_H

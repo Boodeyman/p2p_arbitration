@@ -9,21 +9,24 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network Sql)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network Sql)
 find_package(CURL REQUIRED)
 
 set(PROJECT_SOURCES
-        binance.h
-        binance.cpp
-        main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
-        scraper.h
-        scraper.cpp
-        hoverbutton.h
-        hoverbutton.cpp
+    binance.h
+    binance.cpp
+    main.cpp
+    mainwindow.cpp
+    mainwindow.h
+    mainwindow.ui
+    scraper.h
+    scraper.cpp
+    hoverbutton.h
+    hoverbutton.cpp
+    login_dialog.h
+    login_dialog.cpp
+    login_dialog.ui
 )
 
 include_directories(/opt/homebrew/include)
@@ -39,9 +42,11 @@ if(${QT_VERSION_MAJOR} VERSION_GREATER_EQUAL 6)
         icons/ADAUSDT.png icons/APTUSDT.png icons/ARUSDT.png icons/ATOMUSDT.png icons/AVAXUSDT.png icons/BNBUSDT.png icons/BTCUSDT.png icons/DOGEUSDT.png icons/DOTUSDT.png icons/ETHUSDT.png icons/exit.png icons/ICPUSDT.png icons/IMXUSDT.png icons/LTCUSDT.png icons/MATICUSDT.png icons/NEARUSDT.png icons/RNDRUSDT.png icons/SHIBUSDT.png icons/SOLUSDT.png icons/TRXUSDT.png icons/UNIUSDT.png icons/WIFUSDT.png icons/XLMUSDT.png icons/XRPUSDT.png
         icons/ADAUSDT.png icons/APTUSDT.png icons/ARUSDT.png icons/ATOMUSDT.png icons/AVAXUSDT.png icons/BNBUSDT.png icons/BTCUSDT.png icons/DOGEUSDT.png icons/DOTUSDT.png icons/ETHUSDT.png icons/exit.png icons/FLOKIUSDT.png icons/FTMUSDT.png icons/ICPUSDT.png icons/IMXUSDT.png icons/INJUSDT.png icons/LTCUSDT.png icons/MATICUSDT.png icons/NEARUSDT.png icons/OPUSDT.png icons/RNDRUSDT.png icons/RUNEUSDT.png icons/SEIUSDT.png icons/SHIBUSDT.png icons/SOLUSDT.png icons/TAOUSDT.png icons/TRXUSDT.png icons/UNIUSDT.png icons/WIFUSDT.png icons/XLMUSDT.png icons/XRPUSDT.png icons/SUIUSDT.png
         hoverbutton.h hoverbutton.cpp
-icons/hoverbuttonicon.png
-proxies.txt
-
+        icons/hoverbuttonicon.png
+        proxies.txt
+        icons/logout.png
+        icons/interface.png
+        icons/logout_1.png
     )
 else()
     if(ANDROID)
@@ -51,7 +56,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(p2p_arbitration_app PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network CURL::libcurl)
+target_link_libraries(p2p_arbitration_app PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Sql CURL::libcurl)
 
 include(GNUInstallDirs)
 install(TARGETS p2p_arbitration_app

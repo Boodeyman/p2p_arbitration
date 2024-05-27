@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include "binance.h"
 #include "scraper.h"
-#include "hoverbutton.h"
+#include "login_dialog.h"
 #include <QLabel>
 #include <QMessageBox>
 #include <QEvent>
@@ -10,12 +10,10 @@
 #include <QFile>
 #include <QTextStream>
 #include <QTimer>
+#include <QVBoxLayout>
 
-// Функция для установки темного стиля
 void setDarkStyle(QWidget *widget) {
     QPalette darkPalette;
-
-    // Настройка цветов для всего приложения
     darkPalette.setColor(QPalette::Window, QColor("#16181c"));
     darkPalette.setColor(QPalette::WindowText, QColor(204, 204, 204));
     darkPalette.setColor(QPalette::Base, QColor("#16181c"));
@@ -27,36 +25,31 @@ void setDarkStyle(QWidget *widget) {
     darkPalette.setColor(QPalette::ButtonText, QColor(255, 255, 255));
     darkPalette.setColor(QPalette::BrightText, QColor(255, 0, 0));
     darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
-
     darkPalette.setColor(QPalette::Highlight, QColor(50, 60, 90));
     darkPalette.setColor(QPalette::HighlightedText, QColor(204, 204, 204));
-
     widget->setPalette(darkPalette);
-
-    // Настройка таблицы
-    // auto tableWidget = widget->findChild<QTableWidget*>();
-    // if (tableWidget) {
-    //     tableWidget->setStyleSheet("QTableWidget { background-color: #1E1E1E; color: #CCCCCC; alternate-background-color: #2E2E2E; gridline-color: #3E3E3E; }"
-    //                                "QHeaderView::section { background-color: #2E2E2E; color: #CCCCCC; border: 1px solid #3E3E3E; }");
-    // }
-
-    // Настройка кнопок
-    // auto buttons = widget->findChildren<QPushButton*>();
-    // for (auto button : buttons) {
-    //     button->setStyleSheet("QPushButton { background-color: #3E3E3E; color: #FFFFFF; border: none; padding: 5px; }"
-    //                           "QPushButton:hover { background-color: #5E5E5E; }");
-    // }
 }
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow), api(new BinanceAPI(this)), scraper(new Scraper(this)) {
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow),
+    api(new BinanceAPI(this)),
+    scraper(new Scraper(this))
+{
     ui->setupUi(this);
 
     setupTableWidget();
     setupCryptoRows();
 
-    hoverButton = new HoverButton(ui->hoverButton, ui->lineEdit, this);
-    ui->verticalLayout->addWidget(hoverButton);
+    // Устанавливаем фильтр событий для hoverButton и lineEdit
+    ui->hoverButton->installEventFilter(this);
+    ui->lineEdit->installEventFilter(this);
+    ui->lineEdit->setVisible(false); // Изначально скрываем lineEdit
+
+    // Создаем таймер для скрытия lineEdit
+    hideTimer = new QTimer(this);
+    hideTimer->setSingleShot(true);
+    connect(hideTimer, &QTimer::timeout, this, &MainWindow::hideLineEdit);
 
     this->installEventFilter(this);
 
@@ -75,55 +68,66 @@ MainWindow::MainWindow(QWidget *parent)
         // Handle error
     });
 
-    loadProxiesFromFile();  // Загрузка прокси-серверов из файла
+    loadProxiesFromFile();
 
     connect(ui->lineEdit, &QLineEdit::textChanged, this, &MainWindow::searchCrypto);
     connect(ui->tableWidget, &QTableWidget::itemSelectionChanged, this, &MainWindow::onRowSelected);
 
     requestData();
 
-    ui->pushButton->setStyleSheet(
-        "QPushButton:hover { color: yellow; }"
-        );
-    ui->pushButton_2->setStyleSheet(
-        "QPushButton:hover { color: yellow; }"
-        );
+    ui->pushButton->setStyleSheet("QPushButton:hover { color: yellow; }");
+    ui->pushButton_2->setStyleSheet("QPushButton:hover { color: yellow; }");
 
-    // Применение темной темы
     setDarkStyle(this);
+
+    connect(ui->logoutButton, &QPushButton::clicked, this, &MainWindow::logout);
+}
+
+void MainWindow::logout() {
+    this->hide();
+    LoginDialog loginDialog;
+    if (loginDialog.exec() == QDialog::Accepted) {
+        this->show();
+    } else {
+        qApp->quit();
+    }
 }
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *event) {
-    if (event->type() == QEvent::MouseButtonPress) {
+    if (watched == ui->hoverButton || watched == ui->lineEdit) {
+        if (event->type() == QEvent::Enter) {
+            ui->lineEdit->setVisible(true);
+            hideTimer->stop();  // Останавливаем таймер, если он запущен
+        } else if (event->type() == QEvent::Leave) {
+            hideTimer->start(1000);  // Запускаем таймер на 1 секунду
+        }
+    } else if (event->type() == QEvent::MouseButtonPress) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-        if (!hoverButton->rect().contains(mouseEvent->pos())) {
+        if (!ui->hoverButton->rect().contains(mouseEvent->pos()) && !ui->lineEdit->rect().contains(mouseEvent->pos())) {
             ui->lineEdit->setVisible(false);
         }
     }
     return QMainWindow::eventFilter(watched, event);
 }
 
+void MainWindow::hideLineEdit() {
+    if (!ui->lineEdit->hasFocus() && !ui->lineEdit->underMouse()) {  // Проверяем, есть ли фокус на lineEdit или наведение
+        ui->lineEdit->setVisible(false);
+    }
+}
+
 void MainWindow::searchCrypto() {
     QString searchQuery = ui->lineEdit->text().trimmed().toUpper();
-    bool found = false;
-
     for (int i = 0; i < ui->tableWidget->rowCount(); ++i) {
-        bool rowMatch = false;
-        QTableWidgetItem *item = ui->tableWidget->item(i, 1);
-
-        if (item->text().toUpper().contains(searchQuery)) {
-            rowMatch = true;
-        }
-
+        bool rowMatch = ui->tableWidget->item(i, 1)->text().toUpper().contains(searchQuery);
         ui->tableWidget->setRowHidden(i, !rowMatch);
     }
 }
 
 void MainWindow::onRowSelected() {
-    QList<QTableWidgetItem*> selection = ui->tableWidget->selectedItems();
+    auto selection = ui->tableWidget->selectedItems();
     if (!selection.isEmpty()) {
-        QTableWidgetItem* item = selection.first();
-        int row = item->row();
+        int row = selection.first()->row();
         QMessageBox::information(this, "Выбранная монета", "Вы выбрали: " + ui->tableWidget->item(row, 1)->text());
     }
 }
@@ -137,9 +141,7 @@ void MainWindow::setupTableWidget() {
     ui->tableWidget->setColumnCount(6);
     QStringList headers = {"", "NAME", "PRICE", "CHANGE", "VOLUME (USDT)", "VOLUME (Crypto)"};
     ui->tableWidget->setHorizontalHeaderLabels(headers);
-    ui->tableWidget->horizontalHeader()->setStyleSheet(
-        "QHeaderView::section { background-color: #16181c; color: #ffffff; }"
-        );
+    ui->tableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section { background-color: #16181c; color: #ffffff; }");
 
     ui->tableWidget->setColumnWidth(0, 30);
     ui->tableWidget->setColumnWidth(1, 200);
@@ -151,11 +153,7 @@ void MainWindow::setupTableWidget() {
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
     ui->tableWidget->verticalHeader()->setVisible(false);
     ui->tableWidget->setShowGrid(true);
-
-    // Enable sorting
     ui->tableWidget->setSortingEnabled(true);
-
-    // Connect the header click signal to the sorting slot
     connect(ui->tableWidget->horizontalHeader(), &QHeaderView::sectionClicked, this, &MainWindow::sortByChangeColumn);
 }
 
@@ -191,7 +189,7 @@ void MainWindow::updateCryptoData(const QString &symbol, const QJsonObject &data
 
         QTableWidgetItem *nameItem = new QTableWidgetItem(fullName);
         nameItem->setTextAlignment(Qt::AlignCenter);
-        nameItem->setFont(QFont("Arial", 14)); // Устанавливаем жирный шрифт
+        nameItem->setFont(QFont("Arial", 14));
         QTableWidgetItem *priceItem = new QTableWidgetItem(currentPriceFormatted);
         priceItem->setTextAlignment(Qt::AlignCenter);
         QTableWidgetItem *changeItem = new QTableWidgetItem(changeFormatted);

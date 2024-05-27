@@ -34,5 +34,8 @@
         <file>icons/SUIUSDT.png</file>
         <file>icons/hoverbuttonicon.png</file>
         <file>icons/searchLine.png</file>
+        <file>icons/logout.png</file>
+        <file>icons/interface.png</file>
+        <file>icons/logout_1.png</file>
     </qresource>
 </RCC>

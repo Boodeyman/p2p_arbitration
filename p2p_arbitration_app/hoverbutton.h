@@ -1,27 +1,21 @@
 #ifndef HOVERBUTTON_H
 #define HOVERBUTTON_H
 
-#include <QWidget>
 #include <QPushButton>
 #include <QLineEdit>
 #include <QEnterEvent>
-#include <QIcon>
 
-class HoverButton : public QWidget {
+class HoverButton : public QPushButton {
     Q_OBJECT
-
 public:
-    HoverButton(QPushButton *button, QLineEdit *lineEdit, QWidget *parent = nullptr);
-
-private:
-    QPushButton *button;
-    QLineEdit *lineEdit;
-    QString hoverText;
-    QIcon defaultIcon;
-
+    HoverButton(QLineEdit *lineEdit, QWidget *parent = nullptr);
 protected:
     void enterEvent(QEnterEvent *event) override;
     void leaveEvent(QEvent *event) override;
+signals:
+    void hovered(bool isHovered);
+private:
+    QLineEdit *lineEdit;
 };
 
 #endif // HOVERBUTTON_H
