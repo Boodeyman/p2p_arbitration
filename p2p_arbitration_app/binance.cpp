@@ -17,7 +17,7 @@ BinanceAPI::BinanceAPI(QObject *parent) : QObject(parent), scraper(nullptr), cur
 }
 
 void BinanceAPI::loadProxiesFromFile() {
-    QFile file("/Users/Admin/Desktop/HSE/p2p_fullparsing/p2p_arbitration_app/proxies.txt");
+    QFile file("/Users/kirillzykov/Desktop/HSE DSBA/Programming/C++/CryptoX project/p2p_arbitration/p2p_arbitration_app/proxies.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "Failed to open proxies.txt file. Error:" << file.errorString();
         emit errorOccurred("Failed to open proxies.txt file");
@@ -50,7 +50,7 @@ void BinanceAPI::setNextProxy() {
     }
     currentProxyIndex = (currentProxyIndex + 1) % proxyList.size();
     manager->setProxy(proxyList[currentProxyIndex]);
-    // qDebug() << "Using proxy:" << proxyList[currentProxyIndex].hostName() << ":" << proxyList[currentProxyIndex].port();
+    qDebug() << "Using proxy:" << proxyList[currentProxyIndex].hostName() << ":" << proxyList[currentProxyIndex].port();
 }
 
 void BinanceAPI::getCrypto(const QVector<QString> &cryptos) {

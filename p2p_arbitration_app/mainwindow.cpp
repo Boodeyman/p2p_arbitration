@@ -142,12 +142,12 @@ void MainWindow::setupTableWidget() {
     ui->tableWidget->setHorizontalHeaderLabels(headers);
     ui->tableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section { background-color: #16181c; color: #ffffff; }");
 
-    ui->tableWidget->setColumnWidth(0, 30);
+    ui->tableWidget->setColumnWidth(0, 40);
     ui->tableWidget->setColumnWidth(1, 200);
     ui->tableWidget->setColumnWidth(2, 80);
     ui->tableWidget->setColumnWidth(3, 70);
-    ui->tableWidget->setColumnWidth(4, 150);
-    ui->tableWidget->setColumnWidth(5, 150);
+    ui->tableWidget->setColumnWidth(4, 100);
+    ui->tableWidget->setColumnWidth(5, 100);
 
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
     ui->tableWidget->verticalHeader()->setVisible(false);
@@ -224,7 +224,7 @@ void MainWindow::sortByChangeColumn(int column) {
 }
 
 void MainWindow::loadProxiesFromFile() {
-    QFile file("/Users/Admin/Desktop/HSE/p2p_fullparsing/p2p_arbitration_app/proxies.txt");
+    QFile file("/Users/kirillzykov/Desktop/HSE DSBA/Programming/C++/CryptoX project/p2p_arbitration/p2p_arbitration_app/proxies.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox::critical(this, "Error", "Failed to open proxies.txt file");
         return;

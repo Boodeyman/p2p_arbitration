@@ -17,9 +17,9 @@ void Scraper::testIp() {
     QString url = "https://api.ipify.org?format=json";
     makeRequest(url, [](const QByteArray &data, bool success) {
         if (success) {
-            // qDebug() << "Test IP Response data:" << data;
+            qDebug() << "Test IP Response data:" << data;
         } else {
-            // qDebug() << "Test IP failed.";
+            qDebug() << "Test IP failed.";
         }
     });
 }
@@ -50,10 +50,10 @@ void Scraper::fetchUrl(const QString &url, int retryCount) {
             networkProxy.setPassword(proxyParts[3]);
         }
         manager->setProxy(networkProxy);
-        // qDebug() << "Using proxy:" << proxy;
+        qDebug() << "Using proxy:" << proxy;
     } else {
         manager->setProxy(QNetworkProxy::NoProxy);
-        // qDebug() << "Using no proxy";
+        qDebug() << "Using no proxy";
     }
 
     QNetworkReply *reply = manager->get(request);
@@ -66,18 +66,18 @@ void Scraper::onNetworkReply(QNetworkReply *reply) {
     bool success = (reply->error() == QNetworkReply::NoError) && !data.isEmpty();
 
     if (!success) {
-        // qDebug() << "Request failed or returned empty data with proxy" << manager->proxy().hostName() << ":" << reply->errorString();
+        qDebug() << "Request failed or returned empty data with proxy" << manager->proxy().hostName() << ":" << reply->errorString();
         if (retryCount < maxRetries) {
-            // qDebug() << "Retrying... Attempt:" << retryCount + 1;
+            qDebug() << "Retrying... Attempt:" << retryCount + 1;
             fetchUrl(reply->url().toString(), retryCount + 1);
         } else {
-            // qDebug() << "Max retries reached. Giving up.";
+            qDebug() << "Max retries reached. Giving up.";
             if (currentCallback) {
                 currentCallback(data, false);
             }
         }
     } else {
-        // qDebug() << "Response data:" << data;
+        qDebug() << "Response data:" << data;
         if (currentCallback) {
             currentCallback(data, true);
         }

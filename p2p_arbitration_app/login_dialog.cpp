@@ -23,7 +23,7 @@ LoginDialog::~LoginDialog()
 }
 
 void LoginDialog::initializeDatabase() {
-    QString databasePath = "/Users/Admin/Desktop/HSE/p2p_fullparsing/p2p_arbitration_app/users.db";
+    QString databasePath = "/Users/kirillzykov/Desktop/HSE DSBA/Programming/C++/CryptoX project/p2p_arbitration/p2p_arbitration_app/users.db";
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(databasePath);
 
