@@ -1,1 +1,0 @@
-set(__QT_DEPLOY_TARGET_p2p_arbitration_app_FILE /Users/artur/Downloads/p2p_arbitration/build-p2p_arbitration_app-Desktop_arm_darwin_generic_mach_o_64bit-Release/p2p_arbitration_app)
