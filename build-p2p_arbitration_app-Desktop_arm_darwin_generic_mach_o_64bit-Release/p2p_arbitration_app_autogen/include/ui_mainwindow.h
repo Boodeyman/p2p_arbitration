@@ -14,6 +14,7 @@
 #include <QtGui/QIcon>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QComboBox>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
@@ -45,6 +46,8 @@ public:
     QPushButton *hoverButton;
     QLineEdit *lineEdit;
     QLabel *label;
+    QFrame *line;
+    QComboBox *comboBox_2;
     QStatusBar *statusbar;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -83,7 +86,7 @@ public:
         centralwidget->setObjectName("centralwidget");
         tableWidget = new QTableWidget(centralwidget);
         tableWidget->setObjectName("tableWidget");
-        tableWidget->setGeometry(QRect(0, 350, 741, 391));
+        tableWidget->setGeometry(QRect(0, 220, 1001, 481));
         QSizePolicy sizePolicy1(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
@@ -174,6 +177,16 @@ public:
         label->setGeometry(QRect(10, 10, 90, 90));
         label->setPixmap(QPixmap(QString::fromUtf8(":/icons/icons/icon_of_app_1.png")));
         label->setScaledContents(true);
+        line = new QFrame(centralwidget);
+        line->setObjectName("line");
+        line->setGeometry(QRect(0, 100, 1001, 20));
+        line->setFrameShape(QFrame::Shape::HLine);
+        line->setFrameShadow(QFrame::Shadow::Sunken);
+        comboBox_2 = new QComboBox(centralwidget);
+        comboBox_2->addItem(QString());
+        comboBox_2->addItem(QString());
+        comboBox_2->setObjectName("comboBox_2");
+        comboBox_2->setGeometry(QRect(20, 140, 221, 61));
         MainWindow->setCentralWidget(centralwidget);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
@@ -225,6 +238,9 @@ public:
         logoutButton->setText(QString());
         hoverButton->setText(QString());
         label->setText(QString());
+        comboBox_2->setItemText(0, QCoreApplication::translate("MainWindow", "Overview", nullptr));
+        comboBox_2->setItemText(1, QCoreApplication::translate("MainWindow", "Dynamics", nullptr));
+
         menuFile->setTitle(QCoreApplication::translate("MainWindow", "Exit", nullptr));
         menuLanguage->setTitle(QCoreApplication::translate("MainWindow", "Language", nullptr));
     } // retranslateUi

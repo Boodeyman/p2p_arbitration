@@ -1160,6 +1160,8 @@ CMakeFiles/p2p_arbitration_app.dir/mainwindow.cpp.o: \
   /opt/homebrew/include/QtWidgets/qrubberband.h \
   /opt/homebrew/include/QtWidgets/qframe.h \
   /opt/homebrew/include/QtCore/qabstractitemmodel.h \
+  /opt/homebrew/include/QtWidgets/QFrame \
+  /opt/homebrew/lib/QtWidgets.framework/Headers/qframe.h \
   /opt/homebrew/include/QtWidgets/QHBoxLayout \
   /opt/homebrew/lib/QtWidgets.framework/Headers/qboxlayout.h \
   /opt/homebrew/include/QtWidgets/qlayout.h \

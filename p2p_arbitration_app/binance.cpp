@@ -50,7 +50,7 @@ void BinanceAPI::setNextProxy() {
     }
     currentProxyIndex = (currentProxyIndex + 1) % proxyList.size();
     manager->setProxy(proxyList[currentProxyIndex]);
-    // qDebug() << "Using proxy:" << proxyList[currentProxyIndex].hostName() << ":" << proxyList[currentProxyIndex].port();
+    qDebug() << "Using proxy:" << proxyList[currentProxyIndex].hostName() << ":" << proxyList[currentProxyIndex].port();
 }
 
 void BinanceAPI::getCrypto(const QVector<QString> &cryptos) {
