@@ -3,6 +3,8 @@
 #include "binance.h"
 #include "scraper.h"
 #include "login_dialog.h"
+#include "buycrypto.h"
+#include "stylehelper.h"
 #include <QLabel>
 #include <QMessageBox>
 #include <QEvent>
@@ -11,31 +13,16 @@
 #include <QTextStream>
 #include <QTimer>
 
-void setDarkStyle(QWidget *widget) {
-    QPalette darkPalette;
-    darkPalette.setColor(QPalette::Window, QColor("#16181c"));
-    darkPalette.setColor(QPalette::WindowText, QColor(204, 204, 204));
-    darkPalette.setColor(QPalette::Base, QColor("#16181c"));
-    darkPalette.setColor(QPalette::AlternateBase, QColor(22, 24, 28));
-    darkPalette.setColor(QPalette::ToolTipBase, QColor(204, 204, 204));
-    darkPalette.setColor(QPalette::ToolTipText, QColor(204, 204, 204));
-    darkPalette.setColor(QPalette::Text, QColor(204, 204, 204));
-    darkPalette.setColor(QPalette::Button, QColor(62, 62, 62));
-    darkPalette.setColor(QPalette::ButtonText, QColor(255, 255, 255));
-    darkPalette.setColor(QPalette::BrightText, QColor(255, 0, 0));
-    darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
-    darkPalette.setColor(QPalette::Highlight, QColor(50, 60, 90));
-    darkPalette.setColor(QPalette::HighlightedText, QColor(204, 204, 204));
-    widget->setPalette(darkPalette);
-}
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     api(new BinanceAPI(this)),
-    scraper(new Scraper(this))
+    scraper(new Scraper(this)),
+    buycrypto(nullptr)
 {
     ui->setupUi(this);
+
+    connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::openBuyCrypto);
 
     setupTableWidget();
     setupCryptoRows();
@@ -224,7 +211,7 @@ void MainWindow::sortByChangeColumn(int column) {
 }
 
 void MainWindow::loadProxiesFromFile() {
-    QFile file("/Users/Admin/Desktop/HSE/p2p_fullparsing/p2p_arbitration_app/proxies.txt");
+    QFile file("/Users/artur/Downloads/p2p_arbitration/p2p_arbitration_app/proxies.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox::critical(this, "Error", "Failed to open proxies.txt file");
         return;
@@ -242,4 +229,14 @@ void MainWindow::loadProxiesFromFile() {
 
 MainWindow::~MainWindow() {
     delete ui;
+}
+
+void MainWindow::openBuyCrypto()
+{
+    if (!buycrypto) {
+        buycrypto = new class buycrypto(this);
+    }
+    this -> hide();
+    buycrypto->exec();
+    this -> show();
 }

@@ -80,7 +80,7 @@
      <rect>
       <x>110</x>
       <y>13</y>
-      <width>321</width>
+      <width>326</width>
       <height>84</height>
      </rect>
     </property>
@@ -288,7 +288,7 @@
      <x>0</x>
      <y>0</y>
      <width>1001</width>
-     <height>43</height>
+     <height>37</height>
     </rect>
    </property>
    <property name="layoutDirection">

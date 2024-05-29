@@ -24,7 +24,6 @@ private:
     Ui::Dialog *ui;
     void initializeDatabase();
     QSqlDatabase db;
-    void setDarkStyle(QWidget *widget);
 };
 
 #endif // LOGINDIALOG_H

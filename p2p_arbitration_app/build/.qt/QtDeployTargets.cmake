@@ -1,0 +1,1 @@
+set(__QT_DEPLOY_TARGET_p2p_arbitration_app_FILE /Users/artur/Downloads/p2p_arbitration/p2p_arbitration_app/build/p2p_arbitration_app)

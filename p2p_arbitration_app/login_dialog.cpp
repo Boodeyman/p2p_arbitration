@@ -1,5 +1,6 @@
 #include "login_dialog.h"
 #include "ui_login_dialog.h"
+#include "stylehelper.h"
 #include <QMessageBox>
 #include <QSqlQuery>
 #include <QSqlError>
@@ -23,7 +24,7 @@ LoginDialog::~LoginDialog()
 }
 
 void LoginDialog::initializeDatabase() {
-    QString databasePath = "/Users/Admin/Desktop/HSE/p2p_fullparsing/p2p_arbitration_app/users.db";
+    QString databasePath = "/Users/artur/Downloads/p2p_arbitration/p2p_arbitration_app/users.db";
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(databasePath);
 
@@ -93,22 +94,4 @@ void LoginDialog::handleRegister() {
     } else {
         QMessageBox::critical(this, "Ошибка базы данных", query.lastError().text());
     }
-}
-
-void LoginDialog::setDarkStyle(QWidget *widget) {
-    QPalette darkPalette;
-    darkPalette.setColor(QPalette::Window, QColor("#16181c"));
-    darkPalette.setColor(QPalette::WindowText, QColor(204, 204, 204));
-    darkPalette.setColor(QPalette::Base, QColor("#16181c"));
-    darkPalette.setColor(QPalette::AlternateBase, QColor(22, 24, 28));
-    darkPalette.setColor(QPalette::ToolTipBase, QColor(204, 204, 204));
-    darkPalette.setColor(QPalette::ToolTipText, QColor(204, 204, 204));
-    darkPalette.setColor(QPalette::Text, QColor(204, 204, 204));
-    darkPalette.setColor(QPalette::Button, QColor(62, 62, 62));
-    darkPalette.setColor(QPalette::ButtonText, QColor(255, 255, 255));
-    darkPalette.setColor(QPalette::BrightText, QColor(255, 0, 0));
-    darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
-    darkPalette.setColor(QPalette::Highlight, QColor(50, 60, 90));
-    darkPalette.setColor(QPalette::HighlightedText, QColor(204, 204, 204));
-    widget->setPalette(darkPalette);
 }
