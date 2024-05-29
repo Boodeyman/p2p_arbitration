@@ -41,6 +41,8 @@ set(PROJECT_SOURCES
     buycrypto.h
     buycrypto.cpp
     buycrypto.ui
+    stylehelper.h
+    stylehelper.cpp
 )
 
 # Include directories
@@ -65,11 +67,6 @@ if(${QT_VERSION_MAJOR} VERSION_GREATER_EQUAL 6)
         icons/logout_1.png
         icons/icon_of_app.png
         icons/icon_of_app_1.png
-        stylehelper.h
-        stylehelper.cpp
-
-
-
     )
 else()
     if(ANDROID)

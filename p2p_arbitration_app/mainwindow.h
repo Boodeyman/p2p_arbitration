@@ -22,8 +22,6 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    QPushButton* getPushButton2();
-
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
 
