@@ -24,7 +24,7 @@ LoginDialog::~LoginDialog()
 }
 
 void LoginDialog::initializeDatabase() {
-    QString databasePath = "/Users/artur/Downloads/p2p_arbitration/p2p_arbitration_app/users.db";
+    QString databasePath = "/Users/kirillzykov/Desktop/p2p_fullparsing/p2p_arbitration_app/users.db";
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(databasePath);
 
