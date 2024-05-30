@@ -21,10 +21,21 @@ buycrypto::~buycrypto()
 void buycrypto::on_homeButton_clicked()
 {
     this->hide();
-
     // Показываем MainWindow (родительский виджет)
     if (parentWidget()) {
         parentWidget()->show();
     }
 }
 
+
+void buycrypto::changeTheme(int counter)
+{
+    if (counter % 2 == 0) {
+        setDarkStyle(this);
+        ui->homeButton->setStyleSheet("color: #ffffff");
+    }
+    else {
+        setLightStyle(this);
+        ui->homeButton->setStyleSheet("color: #16181c");
+    }
+}

@@ -10,7 +10,9 @@
 #include "scraper.h"
 #include "buycrypto.h"
 
-
+extern int counter;
+const QString proxiesPath = "/Users/artur/p2p_arbitration/p2p_arbitration_app/proxies.txt";
+const QString databasePath = "/Users/artur/users.db";
 namespace Ui {
 class MainWindow;
 }
@@ -35,6 +37,8 @@ private slots:
     void logout();
     void hideLineEdit();
     void openBuyCrypto();
+
+    void on_themeChange_clicked();
 
 private:
     Ui::MainWindow *ui;

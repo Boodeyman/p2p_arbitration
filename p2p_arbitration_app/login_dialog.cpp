@@ -1,6 +1,7 @@
 #include "login_dialog.h"
 #include "ui_login_dialog.h"
 #include "stylehelper.h"
+#include "mainwindow.h"
 #include <QMessageBox>
 #include <QSqlQuery>
 #include <QSqlError>
@@ -12,8 +13,14 @@ LoginDialog::LoginDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     initializeDatabase();
-    setDarkStyle(this);
 
+    if (counter % 2 == 0) {
+        setDarkStyle(this);
+
+    }
+    else {
+        setLightStyle(this);
+    }
     connect(ui->loginButton, &QPushButton::clicked, this, &LoginDialog::handleLogin);
     connect(ui->pushButton_2, &QPushButton::clicked, this, &LoginDialog::handleRegister);
 }
@@ -24,10 +31,8 @@ LoginDialog::~LoginDialog()
 }
 
 void LoginDialog::initializeDatabase() {
-    QString databasePath = "/Users/artur/Downloads/p2p_arbitration/p2p_arbitration_app/users.db";
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(databasePath);
-
     if (!db.open()) {
         QMessageBox::critical(this, "Ошибка базы данных", db.lastError().text());
         qDebug() << "Failed to open database at" << databasePath;
