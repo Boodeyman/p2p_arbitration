@@ -6,5 +6,6 @@
 #include <QColor>
 
 void setDarkStyle(QWidget *widget);
+void setLightStyle(QWidget *widget);
 
 #endif // STYLEHELPER_H

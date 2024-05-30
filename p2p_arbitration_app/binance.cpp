@@ -17,7 +17,7 @@ BinanceAPI::BinanceAPI(QObject *parent) : QObject(parent), scraper(nullptr), cur
 }
 
 void BinanceAPI::loadProxiesFromFile() {
-    QFile file("/Users/kirillzykov/Desktop/p2p_fullparsing/p2p_arbitration_app/proxies.txt");
+    QFile file(proxiesPath1);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "Failed to open proxies.txt file. Error:" << file.errorString();
         emit errorOccurred("Failed to open proxies.txt file");

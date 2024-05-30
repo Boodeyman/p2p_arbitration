@@ -220,7 +220,7 @@ void MainWindow::sortByChangeColumn(int column) {
 }
 
 void MainWindow::loadProxiesFromFile() {
-    QFile file("/Users/kirillzykov/Desktop/p2p_fullparsing/p2p_arbitration_app/proxies.txt");
+    QFile file(proxiesPath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox::critical(this, "Error", "Failed to open proxies.txt file");
         return;
@@ -245,10 +245,34 @@ void MainWindow::openBuyCrypto()
     if (!buycrypto) {
         buycrypto = new class buycrypto(this);
     }
+    buycrypto->changeTheme(counter);
     this -> hide();
     buycrypto->exec();
     this -> show();
 }
+
+
+
+int counter = 0;
+void MainWindow::on_themeChange_clicked()
+{
+    counter ++;
+    if (counter % 2 == 0) {
+        ui->themeChange->setIcon(QIcon(":/icons/icons/dark.png"));
+        ui->tableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section { background-color: #16181c; color: #ffffff; }");
+        ui->pushButton->setStyleSheet("color: #ffffff");
+        ui->pushButton_2->setStyleSheet("color: #ffffff");
+        setDarkStyle(this);
+    }
+    else {
+        ui->themeChange->setIcon(QIcon(":/icons/icons/light.png"));
+        ui->tableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section { background-color: #f5f5f5; color: #16181c; }");
+        ui->pushButton->setStyleSheet("color: #16181c");
+        ui->pushButton_2->setStyleSheet("color: #16181c");
+        setLightStyle(this);
+    }
+}
+
 
 QString MainWindow::formatWithSuffix(double num) {
     if (num >= 1'000'000) {
@@ -474,8 +498,3 @@ void MainWindow::updateTopVolumeWidget(QTableWidget* tableWidget, QTableWidget* 
         topVolumeWidget->setItem(newRow, 3, changeItem);
     }
 }
-
-
-
-
-

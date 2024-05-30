@@ -17,6 +17,7 @@ class buycrypto : public QDialog
 public:
     explicit buycrypto(QWidget *parent = nullptr);
     ~buycrypto();
+    void changeTheme(int counter);
 
 private slots:
     void on_homeButton_clicked();
