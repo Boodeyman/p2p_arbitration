@@ -9,6 +9,7 @@
 #include "binance.h"
 #include "scraper.h"
 #include "buycrypto.h"
+#include "ui_mainwindow.h"
 
 extern int counter;
 const QString proxiesPath = "/Users/artur/p2p_arbitration/p2p_arbitration_app/proxies.txt";
@@ -49,11 +50,16 @@ private:
     QTimer *hideTimer;  // Таймер для скрытия lineEdit
     QMap<QString, int> symbolToRowMap;
     buycrypto *buycrypto;
+    QString formatWithSuffix(double num);
 
 
     void setupTableWidget();
     void setupCryptoRows();
     void loadProxiesFromFile();
+    void updateTopLosersWidget(QTableWidget* tableWidget, QTableWidget* topLosersWidget);
+    void updateTopGainersWidget(QTableWidget* tableWidget, QTableWidget* topGainersWidget);
+    void updateTopVolumeWidget(QTableWidget* tableWidget, QTableWidget* topVolumeWidget);
+
 };
 
 #endif // MAINWINDOW_H

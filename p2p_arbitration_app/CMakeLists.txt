@@ -18,10 +18,15 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(MACOSX_BUNDLE_BUNDLE_NAME "p2p_arbitration_app")
+set(MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/Users/Admin/Desktop/HSE/p2p_fullparsing/build-p2p_arbitration_app-Desktop_arm_darwin_generic_mach_o_64bit-Release/.qt/info_plist/p2p_arbitration_app/Info.plist")
+set(MACOSX_BUNDLE_ICON_FILE "icons/icon_of_app_1.png")
+
 # Find Qt and required components
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network Sql)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network Sql)
 find_package(CURL REQUIRED)
+
 
 # Project sources
 set(PROJECT_SOURCES
