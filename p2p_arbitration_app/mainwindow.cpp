@@ -83,6 +83,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event) {
     if (watched == ui->hoverButton || watched == ui->lineEdit) {
         if (event->type() == QEvent::Enter) {
             ui->lineEdit->setVisible(true);
+
             hideTimer->stop();  // Останавливаем таймер, если он запущен
         } else if (event->type() == QEvent::Leave) {
             hideTimer->start(250);  // Запускаем таймер на 0.25 секунду
@@ -259,16 +260,32 @@ void MainWindow::on_themeChange_clicked()
     counter ++;
     if (counter % 2 == 0) {
         ui->themeChange->setIcon(QIcon(":/icons/icons/dark.png"));
+        ui->hoverButton->setIcon(QIcon(":/icons/icons/hooverDarkStatic.png"));
         ui->tableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section { background-color: #16181c; color: #ffffff; }");
         ui->pushButton->setStyleSheet("color: #ffffff");
-        ui->pushButton_2->setStyleSheet("color: #ffffff");
+        ui->pushButton_2->setStyleSheet(
+            "QPushButton {"
+            "   color: #ffffff;"
+            "}"
+            "QPushButton:hover {"
+            "   color: #eba613;"
+            "}"
+            );
         setDarkStyle(this);
     }
     else {
         ui->themeChange->setIcon(QIcon(":/icons/icons/light.png"));
+        ui->hoverButton->setIcon(QIcon(":/icons/icons/hooverLightStatic.png"));
         ui->tableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section { background-color: #f5f5f5; color: #16181c; }");
         ui->pushButton->setStyleSheet("color: #16181c");
-        ui->pushButton_2->setStyleSheet("color: #16181c");
+        ui->pushButton_2->setStyleSheet(
+            "QPushButton {"
+            "   color: #16181c;"
+            "}"
+            "QPushButton:hover {"
+            "   color: #eba613;"
+            "}"
+            );
         setLightStyle(this);
     }
 }

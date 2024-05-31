@@ -234,7 +234,7 @@
     </property>
     <property name="icon">
      <iconset resource="resources.qrc">
-      <normaloff>:/icons/icons/interface.png</normaloff>:/icons/icons/interface.png</iconset>
+      <normaloff>:/icons/icons/hooverDarkStatic.png</normaloff>:/icons/icons/hooverDarkStatic.png</iconset>
     </property>
     <property name="iconSize">
      <size>

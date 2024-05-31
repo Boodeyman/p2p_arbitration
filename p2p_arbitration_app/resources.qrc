@@ -41,5 +41,9 @@
         <file>icons/icon_of_app_1.png</file>
         <file>icons/dark.png</file>
         <file>icons/light.png</file>
+        <file>icons/hooverDark.gif</file>
+        <file>icons/hooverDarkStatic.png</file>
+        <file>icons/hooverLight.gif</file>
+        <file>icons/hooverLightStatic.png</file>
     </qresource>
 </RCC>

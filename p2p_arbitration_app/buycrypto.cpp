@@ -7,7 +7,14 @@ buycrypto::buycrypto(QWidget *parent)
 {
     ui->setupUi(this);
     setDarkStyle(this);
-    ui->homeButton->setStyleSheet("QPushButton:hover { color: #eba613; }");
+    ui->homeButton->setStyleSheet(
+        "QPushButton {"
+        "   color: #ffffff;"
+        "}"
+        "QPushButton:hover {"
+        "   color: #eba613;"
+        "}"
+    );
 }
 
 buycrypto::~buycrypto()
@@ -32,10 +39,24 @@ void buycrypto::changeTheme(int counter)
 {
     if (counter % 2 == 0) {
         setDarkStyle(this);
-        ui->homeButton->setStyleSheet("color: #ffffff");
+        ui->homeButton->setStyleSheet(
+            "QPushButton {"
+            "   color: #ffffff;"
+            "}"
+            "QPushButton:hover {"
+            "   color: #eba613;"
+            "}"
+        );
     }
     else {
         setLightStyle(this);
-        ui->homeButton->setStyleSheet("color: #16181c");
+        ui->homeButton->setStyleSheet(
+            "QPushButton {"
+            "   color: #16181c;"
+            "}"
+            "QPushButton:hover {"
+            "   color: #eba613;"
+            "}"
+        );
     }
 }
