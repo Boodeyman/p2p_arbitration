@@ -12,8 +12,8 @@
 #include "ui_mainwindow.h"
 
 extern int counter;
-const QString proxiesPath = "/Users/artur/p2p_arbitration/p2p_arbitration_app/proxies.txt";
-const QString databasePath = "/Users/artur/users.db";
+const QString proxiesPath = "/Users/Admin/Desktop/HSE/p2p_fullparsing/p2p_arbitration_app/proxies.txt";
+const QString databasePath = "/Users/Admin/Desktop/HSE/p2p_fullparsing/p2p_arbitration_app/users.db";
 namespace Ui {
 class MainWindow;
 }

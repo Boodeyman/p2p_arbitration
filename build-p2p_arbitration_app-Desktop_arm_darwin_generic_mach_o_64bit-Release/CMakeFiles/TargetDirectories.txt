@@ -1,0 +1,9 @@
+/Users/Admin/Desktop/HSE/p2p_fullparsing/build-p2p_arbitration_app-Desktop_arm_darwin_generic_mach_o_64bit-Release/CMakeFiles/p2p_arbitration_app.dir
+/Users/Admin/Desktop/HSE/p2p_fullparsing/build-p2p_arbitration_app-Desktop_arm_darwin_generic_mach_o_64bit-Release/CMakeFiles/edit_cache.dir
+/Users/Admin/Desktop/HSE/p2p_fullparsing/build-p2p_arbitration_app-Desktop_arm_darwin_generic_mach_o_64bit-Release/CMakeFiles/rebuild_cache.dir
+/Users/Admin/Desktop/HSE/p2p_fullparsing/build-p2p_arbitration_app-Desktop_arm_darwin_generic_mach_o_64bit-Release/CMakeFiles/list_install_components.dir
+/Users/Admin/Desktop/HSE/p2p_fullparsing/build-p2p_arbitration_app-Desktop_arm_darwin_generic_mach_o_64bit-Release/CMakeFiles/install.dir
+/Users/Admin/Desktop/HSE/p2p_fullparsing/build-p2p_arbitration_app-Desktop_arm_darwin_generic_mach_o_64bit-Release/CMakeFiles/install/local.dir
+/Users/Admin/Desktop/HSE/p2p_fullparsing/build-p2p_arbitration_app-Desktop_arm_darwin_generic_mach_o_64bit-Release/CMakeFiles/install/strip.dir
+/Users/Admin/Desktop/HSE/p2p_fullparsing/build-p2p_arbitration_app-Desktop_arm_darwin_generic_mach_o_64bit-Release/CMakeFiles/p2p_arbitration_app_autogen_timestamp_deps.dir
+/Users/Admin/Desktop/HSE/p2p_fullparsing/build-p2p_arbitration_app-Desktop_arm_darwin_generic_mach_o_64bit-Release/CMakeFiles/p2p_arbitration_app_autogen.dir
