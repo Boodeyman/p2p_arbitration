@@ -12,6 +12,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QTimer>
+#include <QCoreApplication>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -21,6 +22,11 @@ MainWindow::MainWindow(QWidget *parent) :
     buycrypto(nullptr)
 {
     ui->setupUi(this);
+
+    QString basePath = QCoreApplication::applicationDirPath();
+
+    proxiesPath = basePath + "/../Resources/proxies.txt";
+    databasePath = basePath + "/../Resources/users.db";
 
     connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::openBuyCrypto);
 

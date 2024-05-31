@@ -8,9 +8,14 @@
 #include <QJsonObject>
 #include <QJsonParseError>
 #include <QDebug>
+#include <QCoreApplication>
 
 BinanceAPI::BinanceAPI(QObject *parent) : QObject(parent), scraper(nullptr), currentProxyIndex(0) {
     manager = new QNetworkAccessManager(this);
+
+    QString basePath = QCoreApplication::applicationDirPath();
+    proxiesPath1 = basePath + "/../Resources/proxies.txt";
+
     loadProxiesFromFile();
     setNextProxy();
     connect(manager, &QNetworkAccessManager::finished, this, &BinanceAPI::onReplyFinished);

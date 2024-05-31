@@ -12,8 +12,8 @@
 #include "ui_mainwindow.h"
 
 extern int counter;
-const QString proxiesPath = "/Users/Admin/Desktop/HSE/p2p_fullparsing/p2p_arbitration_app/proxies.txt";
-const QString databasePath = "/Users/Admin/Desktop/HSE/p2p_fullparsing/p2p_arbitration_app/users.db";
+// const QString proxiesPath = "/Users/Admin/Desktop/HSE/p2p_fullparsing/p2p_arbitration_app/proxies.txt";
+// const QString databasePath = "/Users/Admin/Desktop/HSE/p2p_fullparsing/p2p_arbitration_app/users.db";
 namespace Ui {
 class MainWindow;
 }
@@ -51,6 +51,8 @@ private:
     QMap<QString, int> symbolToRowMap;
     buycrypto *buycrypto;
     QString formatWithSuffix(double num);
+    QString proxiesPath;
+    QString databasePath;
 
 
     void setupTableWidget();

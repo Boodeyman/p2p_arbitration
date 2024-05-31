@@ -9,7 +9,7 @@
 #include <QMap>
 #include <QNetworkProxy>
 
-const QString proxiesPath1 = "/Users/Admin/Desktop/HSE/p2p_fullparsing/p2p_arbitration_app/proxies.txt";
+// const QString proxiesPath1 = "/Users/Admin/Desktop/HSE/p2p_fullparsing/p2p_arbitration_app/proxies.txt";
 
 class BinanceAPI : public QObject {
     Q_OBJECT
@@ -37,6 +37,7 @@ private:
     QNetworkAccessManager *manager;
     QVector<QNetworkProxy> proxyList;
     int currentProxyIndex;
+    QString proxiesPath1;
 };
 
 #endif // BINANCE_H

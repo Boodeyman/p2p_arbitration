@@ -24,6 +24,7 @@ private:
     Ui::Dialog *ui;
     void initializeDatabase();
     QSqlDatabase db;
+    QString databasePath;
 };
 
 #endif // LOGINDIALOG_H

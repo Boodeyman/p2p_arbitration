@@ -12,6 +12,11 @@ LoginDialog::LoginDialog(QWidget *parent) :
     ui(new Ui::Dialog)
 {
     ui->setupUi(this);
+
+    QString basePath = QCoreApplication::applicationDirPath();
+
+    databasePath = basePath + "/../Resources/users.db";
+
     initializeDatabase();
 
     if (counter % 2 == 0) {

@@ -19,7 +19,11 @@ set(MACOSX_BUNDLE_BUNDLE_NAME "p2p_arbitration_app")
 set(MACOSX_BUNDLE_ICON_FILE "icon_of_app.ico")
 
 set(app_icon_macos "${CMAKE_CURRENT_SOURCE_DIR}/resources/icon_of_app.ico")
+set(proxies_macos "${CMAKE_CURRENT_SOURCE_DIR}/resources/proxies.txt")
+set(database_macos "${CMAKE_CURRENT_SOURCE_DIR}/resources/users.db")
 set_source_files_properties(${app_icon_macos} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+set_source_files_properties(${proxies_macos} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+set_source_files_properties(${database_macos} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
 # Поиск Qt и необходимых компонентов
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network Sql)
@@ -29,6 +33,9 @@ find_package(CURL REQUIRED)
 # Проверка найденных версий
 message(STATUS "Using Qt version: ${Qt${QT_VERSION_MAJOR}_VERSION}")
 message(STATUS "CURL found: ${CURL_FOUND}")
+
+set(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks")
+set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 
 # Источники проекта
 set(PROJECT_SOURCES
@@ -51,6 +58,11 @@ set(PROJECT_SOURCES
     stylehelper.h
     stylehelper.cpp
     ${app_icon_macos}
+    ${proxies_macos}
+    ${database_macos}
+    # ${CMAKE_CURRENT_SOURCE_DIR}/resources/proxies.txt
+    # ${CMAKE_CURRENT_SOURCE_DIR}/resources/users.db
+
 )
 
 # Указание директорий для include
@@ -69,7 +81,6 @@ if(${QT_VERSION_MAJOR} VERSION_GREATER_EQUAL 6)
         icons/ADAUSDT.png icons/APTUSDT.png icons/ARUSDT.png icons/ATOMUSDT.png icons/AVAXUSDT.png icons/BNBUSDT.png icons/BTCUSDT.png icons/DOGEUSDT.png icons/DOTUSDT.png icons/ETHUSDT.png icons/exit.png icons/FLOKIUSDT.png icons/FTMUSDT.png icons/ICPUSDT.png icons/IMXUSDT.png icons/LTCUSDT.png icons/MATICUSDT.png icons/NEARUSDT.png icons/RNDRUSDT.png icons/SHIBUSDT.png icons/SOLUSDT.png icons/TRXUSDT.png icons/UNIUSDT.png icons/WIFUSDT.png icons/XLMUSDT.png icons/XRPUSDT.png icons/SUIUSDT.png
         hoverbutton.h hoverbutton.cpp
         icons/hoverbuttonicon.png
-        proxies.txt
         icons/logout.png
         icons/interface.png
         icons/logout_1.png
@@ -79,6 +90,8 @@ if(${QT_VERSION_MAJOR} VERSION_GREATER_EQUAL 6)
         icons/light.png
         icons/light.png
         resources/icon_of_app.ico
+        resources/users.db
+        resources/proxies.txt
     )
 else()
     if(ANDROID)
@@ -92,13 +105,21 @@ endif()
 target_link_libraries(p2p_arbitration_app PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Sql CURL::libcurl)
 
 # Директории для установки
-include(GNUInstallDirs)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "/Users/Admin/Desktop/HSE/p2p_fullparsing/build-p2p_arbitration_app-Desktop_arm_darwin_generic_mach_o_64bit-Release")
+# include(GNUInstallDirs)
+#[[set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE)]] #"/Users/Admin/Desktop/HSE/p2p_fullparsing/build-p2p_arbitration_app-Desktop_arm_darwin_generic_mach_o_64bit-Release")]]
+
 install(TARGETS p2p_arbitration_app
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}
 )
+
+# Копирование файлов ресурсов в пакет приложения
+# install(FILES
+#     ${CMAKE_CURRENT_SOURCE_DIR}/resources/proxies.txt
+#     ${CMAKE_CURRENT_SOURCE_DIR}/resources/users.db
+#     DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}/p2p_arbitration_app.app/Contents/Resources"
+# )
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(p2p_arbitration_app)
