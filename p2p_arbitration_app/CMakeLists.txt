@@ -76,6 +76,8 @@ if(${QT_VERSION_MAJOR} VERSION_GREATER_EQUAL 6)
         icons/light.png
         icons/light.png
         icons/hooverDark.gif icons/hooverDarkStatic.png icons/hooverLight.gif icons/hooverLightStatic.png
+        icons/arrowBlack.png icons/arrowWhite.png
+        icons/logoutBlack.png icons/logoutWhite.png
     )
 else()
     if(ANDROID)

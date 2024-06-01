@@ -45,5 +45,9 @@
         <file>icons/hooverDarkStatic.png</file>
         <file>icons/hooverLight.gif</file>
         <file>icons/hooverLightStatic.png</file>
+        <file>icons/arrowBlack.png</file>
+        <file>icons/arrowWhite.png</file>
+        <file>icons/logoutBlack.png</file>
+        <file>icons/logoutWhite.png</file>
     </qresource>
 </RCC>

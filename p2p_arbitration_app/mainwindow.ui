@@ -60,6 +60,25 @@
     <property name="mouseTracking">
      <bool>true</bool>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QTableWidget {
+    background-color: #16181c;
+    color: #cccccc;
+    gridline-color: #444444;
+}
+QTableWidget QHeaderView::section {
+    background-color: #16181c;
+    color: #cccccc;
+    border: 1px solid #444444;
+}
+QTableWidget::item {
+    background-color: #16181c;
+    color: #cccccc;
+}</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::NoFrame</enum>
+    </property>
     <property name="showGrid">
      <bool>false</bool>
     </property>
@@ -84,7 +103,7 @@
      <rect>
       <x>110</x>
       <y>13</y>
-      <width>326</width>
+      <width>341</width>
       <height>84</height>
      </rect>
     </property>
@@ -150,7 +169,7 @@
      <item>
       <widget class="QComboBox" name="comboBox">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -165,8 +184,40 @@
        <property name="autoFillBackground">
         <bool>false</bool>
        </property>
+       <property name="styleSheet">
+        <string notr="true">	QComboBox {
+        background-color: #16181c;
+        color: #cccccc;
+        border: 1px solid #444444;
+    }
+    QComboBox QAbstractItemView {
+        background-color: #16181c;
+        color: #cccccc;
+        selection-background-color: #444444;
+        selection-color: #cccccc;
+    }
+    QComboBox::drop-down {
+        subcontrol-origin: padding;
+        subcontrol-position: top right;
+        border-left: 1px solid #444444;
+        background-color: #16181c;
+    }
+    QComboBox::down-arrow {
+		image: url(:/icons/icons/arrowWhite.png);
+		width: 12px;
+    }</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>2</width>
+         <height>2</height>
+        </size>
+       </property>
+       <property name="duplicatesEnabled">
+        <bool>false</bool>
+       </property>
        <property name="frame">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <item>
         <property name="text">
@@ -199,7 +250,7 @@
     </property>
     <property name="icon">
      <iconset resource="resources.qrc">
-      <normaloff>:/icons/icons/logout_1.png</normaloff>:/icons/icons/logout_1.png</iconset>
+      <normaloff>:/icons/icons/logoutWhite.png</normaloff>:/icons/icons/logoutWhite.png</iconset>
     </property>
     <property name="iconSize">
      <size>
@@ -303,8 +354,31 @@
       <x>10</x>
       <y>140</y>
       <width>131</width>
-      <height>61</height>
+      <height>31</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">	QComboBox {
+        background-color: #16181c;
+        color: #cccccc;
+        border: 1px solid #444444;
+    }
+    QComboBox QAbstractItemView {
+        background-color: #16181c;
+        color: #cccccc;
+        selection-background-color: #444444;
+        selection-color: #cccccc;
+    }
+    QComboBox::drop-down {
+        subcontrol-origin: padding;
+        subcontrol-position: top right;
+        border-left: 1px solid #444444;
+        background-color: #16181c;
+    }
+    QComboBox::down-arrow {
+       	image: url(:/icons/icons/arrowWhite.png);
+		width: 12px;
+    }</string>
     </property>
     <item>
      <property name="text">

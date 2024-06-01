@@ -26,7 +26,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setupTableWidget();
     setupCryptoRows();
-
     // Устанавливаем фильтр событий для hoverButton и lineEdit
     ui->hoverButton->installEventFilter(this);
     ui->lineEdit->installEventFilter(this);
@@ -63,7 +62,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->pushButton->setStyleSheet("QPushButton:hover { color: #eba613; }");
     ui->pushButton_2->setStyleSheet("QPushButton:hover { color: #eba613; }");
-
     setDarkStyle(this);
 
     connect(ui->logoutButton, &QPushButton::clicked, this, &MainWindow::logout);
@@ -129,16 +127,18 @@ void MainWindow::setupTableWidget() {
     ui->tableWidget->setColumnCount(6);
     QStringList headers = {"", "NAME", "PRICE", "CHANGE", "VOLUME (USDT)", "VOLUME (Crypto)"};
     ui->tableWidget->setHorizontalHeaderLabels(headers);
-    ui->tableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section { background-color: #16181c; color: #ffffff; }");
 
+    // Устанавливаем фиксированную ширину для первой колонки
     ui->tableWidget->setColumnWidth(0, 40);
-    ui->tableWidget->setColumnWidth(1, 200);
-    ui->tableWidget->setColumnWidth(2, 150);
-    ui->tableWidget->setColumnWidth(3, 70);
-    ui->tableWidget->setColumnWidth(4, 150);
-    ui->tableWidget->setColumnWidth(5, 150);
 
+    // Устанавливаем режим изменения размера колонок для других колонок
+    for (int i = 1; i < ui->tableWidget->columnCount(); ++i) {
+        ui->tableWidget->horizontalHeader()->setSectionResizeMode(i, QHeaderView::Stretch);
+    }
+
+    // Оставляем последнюю колонку растягивающейся
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
+
     ui->tableWidget->verticalHeader()->setVisible(false);
     ui->tableWidget->setShowGrid(true);
     ui->tableWidget->setSortingEnabled(true);
@@ -261,7 +261,7 @@ void MainWindow::on_themeChange_clicked()
     if (counter % 2 == 0) {
         ui->themeChange->setIcon(QIcon(":/icons/icons/dark.png"));
         ui->hoverButton->setIcon(QIcon(":/icons/icons/hooverDarkStatic.png"));
-        ui->tableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section { background-color: #16181c; color: #ffffff; }");
+        ui->logoutButton->setIcon(QIcon(":/icons/icons/logoutWhite.png"));
         ui->pushButton->setStyleSheet("color: #ffffff");
         ui->pushButton_2->setStyleSheet(
             "QPushButton {"
@@ -272,11 +272,15 @@ void MainWindow::on_themeChange_clicked()
             "}"
             );
         setDarkStyle(this);
+        setDarkStyle(this);
+        setDarkStyle(ui->tableWidget);
+        setDarkStyle(ui->comboBox);
+        setDarkStyle(ui->comboBox_2);
     }
     else {
         ui->themeChange->setIcon(QIcon(":/icons/icons/light.png"));
         ui->hoverButton->setIcon(QIcon(":/icons/icons/hooverLightStatic.png"));
-        ui->tableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section { background-color: #f5f5f5; color: #16181c; }");
+        ui->logoutButton->setIcon(QIcon(":/icons/icons/logoutBlack.png"));
         ui->pushButton->setStyleSheet("color: #16181c");
         ui->pushButton_2->setStyleSheet(
             "QPushButton {"
@@ -287,6 +291,9 @@ void MainWindow::on_themeChange_clicked()
             "}"
             );
         setLightStyle(this);
+        setLightStyle(ui->tableWidget);
+        setLightStyle(ui->comboBox);
+        setLightStyle(ui->comboBox_2);
     }
 }
 

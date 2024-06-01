@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QPalette>
 #include <QColor>
+#include <QTableWidget>
 
 void setDarkStyle(QWidget *widget);
 void setLightStyle(QWidget *widget);
