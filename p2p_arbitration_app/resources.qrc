@@ -41,5 +41,12 @@
         <file>icons/icon_of_app_1.png</file>
         <file>icons/dark.png</file>
         <file>icons/light.png</file>
+        <file>icons/AAVEUSDT.png</file>
+        <file>icons/BONKUSDT.png</file>
+        <file>icons/JASMYUSDT.png</file>
+        <file>icons/LDOUSDT.png</file>
+        <file>icons/NOTUSDT.png</file>
+        <file>icons/TIAUSDT.png</file>
+        <file>icons/WBTSUSDT.png</file>
     </qresource>
 </RCC>

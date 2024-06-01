@@ -74,11 +74,8 @@ if(${QT_VERSION_MAJOR} VERSION_GREATER_EQUAL 6)
         MACOSX_BUNDLE
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        icons/ADAUSDT.png icons/ATOMUSDT.png icons/BNBUSDT.png icons/BTCUSDT.png icons/DOGEUSDT.png icons/ETHUSDT.png icons/SOLUSDT.png icons/XRPUSDT.png
         resources.qrc
         icons/exit.png
-        icons/ADAUSDT.png icons/ATOMUSDT.png icons/AVAXUSDT.png icons/BNBUSDT.png icons/BTCUSDT.png icons/DOGEUSDT.png icons/DOTUSDT.png icons/ETHUSDT.png icons/exit.png icons/ICPUSDT.png icons/LTCUSDT.png icons/MATICUSDT.png icons/NEARUSDT.png icons/SHIBUSDT.png icons/SOLUSDT.png icons/TRXUSDT.png icons/UNIUSDT.png icons/XRPUSDT.png
-        icons/ADAUSDT.png icons/APTUSDT.png icons/ARUSDT.png icons/ATOMUSDT.png icons/AVAXUSDT.png icons/BNBUSDT.png icons/BTCUSDT.png icons/DOGEUSDT.png icons/DOTUSDT.png icons/ETHUSDT.png icons/exit.png icons/FLOKIUSDT.png icons/FTMUSDT.png icons/ICPUSDT.png icons/IMXUSDT.png icons/LTCUSDT.png icons/MATICUSDT.png icons/NEARUSDT.png icons/RNDRUSDT.png icons/SHIBUSDT.png icons/SOLUSDT.png icons/TRXUSDT.png icons/UNIUSDT.png icons/WIFUSDT.png icons/XLMUSDT.png icons/XRPUSDT.png icons/SUIUSDT.png
         hoverbutton.h hoverbutton.cpp
         icons/hoverbuttonicon.png
         icons/logout.png

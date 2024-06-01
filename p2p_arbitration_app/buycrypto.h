@@ -20,7 +20,7 @@ public:
     void changeTheme(int counter);
 
 private slots:
-    void on_homeButton_clicked();
+    void on_pushButton_clicked();
 
 private:
     Ui::buycrypto *ui;

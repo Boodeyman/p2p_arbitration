@@ -75,6 +75,7 @@ void BinanceAPI::getCrypto(const QVector<QString> &cryptos) {
     }
 }
 
+
 void BinanceAPI::onReplyFinished(QNetworkReply *reply) {
     QString symbol = reply->request().attribute(QNetworkRequest::User).toString();
     QByteArray data = reply->readAll();
@@ -141,3 +142,5 @@ void BinanceAPI::onReplyFinished(QNetworkReply *reply) {
 void BinanceAPI::setScraper(Scraper *scraper) {
     this->scraper = scraper;
 }
+
+

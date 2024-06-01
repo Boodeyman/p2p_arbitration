@@ -8,8 +8,9 @@
 #include <QJsonObject>
 #include <QMap>
 #include <QNetworkProxy>
-
-// const QString proxiesPath1 = "/Users/Admin/Desktop/HSE/p2p_fullparsing/p2p_arbitration_app/proxies.txt";
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 class BinanceAPI : public QObject {
     Q_OBJECT

@@ -125,7 +125,7 @@ void MainWindow::onRowSelected() {
 }
 
 void MainWindow::requestData() {
-    QVector<QString> cryptos = {"BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "ATOMUSDT", "LTCUSDT", "SHIBUSDT", "AVAXUSDT", "TRXUSDT", "DOTUSDT", "NEARUSDT", "MATICUSDT", "ICPUSDT", "UNIUSDT", "RNDRUSDT", "APTUSDT", "IMXUSDT", "ARUSDT", "XLMUSDT", "WIFUSDT", "FTMUSDT", "OPUSDT", "TAOUSDT", "SUIUSDT", "INJUSDT", "RUNEUSDT", "FLOKIUSDT", "SEIUSDT"};
+    QVector<QString> cryptos = {"BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "ATOMUSDT", "LTCUSDT", "SHIBUSDT", "AVAXUSDT", "TRXUSDT", "DOTUSDT", "NEARUSDT", "MATICUSDT", "ICPUSDT", "UNIUSDT", "RNDRUSDT", "APTUSDT", "IMXUSDT", "ARUSDT", "XLMUSDT", "FTMUSDT", "OPUSDT", "TAOUSDT", "SUIUSDT", "INJUSDT", "RUNEUSDT", "FLOKIUSDT", "SEIUSDT", "BONKUSDT", "LDOUSDT", "TIAUSDT", "JASMYUSDT", "NOTUSDT", "AAVEUSDT"};
     api->getCrypto(cryptos);
 }
 
@@ -138,9 +138,9 @@ void MainWindow::setupTableWidget() {
 
     ui->tableWidget->setColumnWidth(0, 40);
     ui->tableWidget->setColumnWidth(1, 200);
-    ui->tableWidget->setColumnWidth(2, 150);
+    ui->tableWidget->setColumnWidth(2, 200);
     ui->tableWidget->setColumnWidth(3, 70);
-    ui->tableWidget->setColumnWidth(4, 150);
+    ui->tableWidget->setColumnWidth(4, 200);
     ui->tableWidget->setColumnWidth(5, 150);
 
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
@@ -151,7 +151,7 @@ void MainWindow::setupTableWidget() {
 }
 
 void MainWindow::setupCryptoRows() {
-    QStringList cryptos = {"BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "ATOMUSDT", "LTCUSDT", "SHIBUSDT", "AVAXUSDT", "TRXUSDT", "DOTUSDT", "NEARUSDT", "MATICUSDT", "ICPUSDT", "UNIUSDT", "RNDRUSDT", "APTUSDT", "IMXUSDT", "ARUSDT", "XLMUSDT", "WIFUSDT", "FTMUSDT", "OPUSDT", "TAOUSDT", "SUIUSDT", "INJUSDT", "RUNEUSDT", "FLOKIUSDT", "SEIUSDT"};
+    QStringList cryptos = {"BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "ATOMUSDT", "LTCUSDT", "SHIBUSDT", "AVAXUSDT", "TRXUSDT", "DOTUSDT", "NEARUSDT", "MATICUSDT", "ICPUSDT", "UNIUSDT", "RNDRUSDT", "APTUSDT", "IMXUSDT", "ARUSDT", "XLMUSDT", "FTMUSDT", "OPUSDT", "TAOUSDT", "SUIUSDT", "INJUSDT", "RUNEUSDT", "FLOKIUSDT", "SEIUSDT", "BONKUSDT", "LDOUSDT", "TIAUSDT", "JASMYUSDT", "NOTUSDT", "AAVEUSDT"};
     for (int i = 0; i < cryptos.size(); ++i) {
         symbolToRowMap[cryptos[i]] = i;
         ui->tableWidget->insertRow(i);

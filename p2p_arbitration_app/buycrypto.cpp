@@ -6,8 +6,12 @@ buycrypto::buycrypto(QWidget *parent)
     ui(new Ui::buycrypto)
 {
     ui->setupUi(this);
+    ui->pushButton->setStyleSheet("QPushButton:hover { color: #eba613; }");
+    ui->pushButton_4->setStyleSheet("QPushButton:hover { color: #eba613; }");
+    // В файле buycrypto.cpp в конструкторе
+    ui->cryptoComboBox->addItems({"BTCUSDT", "ETHUSDT", "XRPUSDT", "ADAUSDT", "DOTUSDT"}); // Примеры символов
+
     setDarkStyle(this);
-    ui->homeButton->setStyleSheet("QPushButton:hover { color: #eba613; }");
 }
 
 buycrypto::~buycrypto()
@@ -18,7 +22,7 @@ buycrypto::~buycrypto()
 
 
 
-void buycrypto::on_homeButton_clicked()
+void buycrypto::on_pushButton_clicked()
 {
     this->hide();
     // Показываем MainWindow (родительский виджет)
@@ -32,10 +36,14 @@ void buycrypto::changeTheme(int counter)
 {
     if (counter % 2 == 0) {
         setDarkStyle(this);
-        ui->homeButton->setStyleSheet("color: #ffffff");
+        ui->pushButton->setStyleSheet("color: #ffffff");
+        ui->pushButton->setStyleSheet("QPushButton:hover { color: #eba613; }");
+        ui->pushButton_4->setStyleSheet("QPushButton:hover { color: #eba613; }");
     }
     else {
         setLightStyle(this);
-        ui->homeButton->setStyleSheet("color: #16181c");
+        ui->pushButton->setStyleSheet("color: #16181c");
+        ui->pushButton->setStyleSheet("QPushButton:hover { color: #eba613; }");
+        ui->pushButton_4->setStyleSheet("QPushButton:hover { color: #eba613; }");
     }
 }
