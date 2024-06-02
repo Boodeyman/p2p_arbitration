@@ -33,12 +33,10 @@ MainWindow::MainWindow(QWidget *parent) :
     setupTableWidget();
     setupCryptoRows();
 
-    // Устанавливаем фильтр событий для hoverButton и lineEdit
     ui->hoverButton->installEventFilter(this);
     ui->lineEdit->installEventFilter(this);
-    ui->lineEdit->setVisible(false); // Изначально скрываем lineEdit
+    ui->lineEdit->setVisible(false);
 
-    // Создаем таймер для скрытия lineEdit
     hideTimer = new QTimer(this);
     hideTimer->setSingleShot(true);
     connect(hideTimer, &QTimer::timeout, this, &MainWindow::hideLineEdit);
@@ -89,9 +87,9 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event) {
     if (watched == ui->hoverButton || watched == ui->lineEdit) {
         if (event->type() == QEvent::Enter) {
             ui->lineEdit->setVisible(true);
-            hideTimer->stop();  // Останавливаем таймер, если он запущен
+            hideTimer->stop();
         } else if (event->type() == QEvent::Leave) {
-            hideTimer->start(250);  // Запускаем таймер на 0.25 секунду
+            hideTimer->start(250);
         }
     } else if (event->type() == QEvent::MouseButtonPress) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
@@ -103,7 +101,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event) {
 }
 
 void MainWindow::hideLineEdit() {
-    if (!ui->lineEdit->hasFocus() && !ui->lineEdit->underMouse()) {  // Проверяем, есть ли фокус на lineEdit или наведение
+    if (!ui->lineEdit->hasFocus() && !ui->lineEdit->underMouse()) {
         ui->lineEdit->setVisible(false);
     }
 }
@@ -128,7 +126,6 @@ void MainWindow::requestData() {
     QVector<QString> cryptos = {"BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "ATOMUSDT", "LTCUSDT", "SHIBUSDT", "AVAXUSDT", "TRXUSDT", "DOTUSDT", "NEARUSDT", "MATICUSDT", "ICPUSDT", "UNIUSDT", "RNDRUSDT", "APTUSDT", "IMXUSDT", "ARUSDT", "XLMUSDT", "FTMUSDT", "OPUSDT", "TAOUSDT", "SUIUSDT", "INJUSDT", "RUNEUSDT", "FLOKIUSDT", "SEIUSDT", "BONKUSDT", "LDOUSDT", "TIAUSDT", "JASMYUSDT", "NOTUSDT", "AAVEUSDT"};
     api->getCrypto(cryptos);
 }
-
 
 void MainWindow::setupTableWidget() {
     ui->tableWidget->setColumnCount(6);
@@ -157,8 +154,6 @@ void MainWindow::setupCryptoRows() {
         ui->tableWidget->insertRow(i);
     }
 }
-
-
 
 void MainWindow::updateCryptoData(const QString &symbol, const QJsonObject &data) {
     if (data["success"].toBool()) {
@@ -207,15 +202,23 @@ void MainWindow::updateCryptoData(const QString &symbol, const QJsonObject &data
         ui->tableWidget->setItem(row, 4, volumeUsdtItem);
         ui->tableWidget->setItem(row, 5, volumeCryptoItem);
 
+        updateBuyCryptoData(symbol, currentPrice, changePercent, volumeInUSDT); // Передача данных в buycrypto
+
         updateTopLosersWidget(ui->tableWidget, ui->topLosersWidget);
         updateTopGainersWidget(ui->tableWidget, ui->topGainersWidget);
         updateTopVolumeWidget(ui->tableWidget, ui->topVolumeWidget);
-
-
     } else {
         // Handle error
     }
 }
+
+void MainWindow::updateBuyCryptoData(const QString &symbol, double price, double change, double volume) {
+    if (buycrypto) {
+        buycrypto->updateCryptoData(symbol, price, change, volume);
+    }
+}
+
+
 
 void MainWindow::sortByChangeColumn(int column) {
     if (column == 3) {
@@ -257,28 +260,46 @@ void MainWindow::openBuyCrypto()
     this -> show();
 }
 
-
-
 int counter = 0;
+
 void MainWindow::on_themeChange_clicked()
 {
     counter ++;
     if (counter % 2 == 0) {
         ui->themeChange->setIcon(QIcon(":/icons/icons/dark.png"));
         ui->tableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section { background-color: #16181c; color: #ffffff; }");
-        ui->pushButton->setStyleSheet("color: #ffffff");
-        ui->pushButton_2->setStyleSheet("color: #ffffff");
+        ui->pushButton->setStyleSheet(        "QPushButton {"
+                                      "    color: #ffffff;"
+                                      "}"
+                                      "QPushButton:hover {"
+                                      "    color: #eba613;"
+                                      "}");
+        ui->pushButton_2->setStyleSheet(        "QPushButton {"
+                                        "    color: #ffffff;"
+                                        "}"
+                                        "QPushButton:hover {"
+                                        "    color: #eba613;"
+                                        "}");
         setDarkStyle(this);
     }
     else {
         ui->themeChange->setIcon(QIcon(":/icons/icons/light.png"));
         ui->tableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section { background-color: #f5f5f5; color: #16181c; }");
-        ui->pushButton->setStyleSheet("color: #16181c");
-        ui->pushButton_2->setStyleSheet("color: #16181c");
+        ui->pushButton->setStyleSheet(        "QPushButton {"
+                                      "    color: #16181c;"
+                                      "}"
+                                      "QPushButton:hover {"
+                                      "    color: #eba613;"
+                                      "}");
+        ui->pushButton_2->setStyleSheet(        "QPushButton {"
+                                        "    color: #16181c;"
+                                        "}"
+                                        "QPushButton:hover {"
+                                        "    color: #eba613;"
+                                        "}");
         setLightStyle(this);
     }
 }
-
 
 QString MainWindow::formatWithSuffix(double num) {
     if (num >= 1'000'000) {
@@ -290,68 +311,55 @@ QString MainWindow::formatWithSuffix(double num) {
     }
 }
 
-
 void MainWindow::updateTopLosersWidget(QTableWidget* tableWidget, QTableWidget* topLosersWidget) {
-
     ui->topLosersWidget->setColumnWidth(0, 40);
     ui->topLosersWidget->setColumnWidth(1, 50);
     ui->topLosersWidget->setColumnWidth(2, 70);
     ui->topLosersWidget->setColumnWidth(3, 70);
 
-    // Очистка текущих данных в topLosersWidget
     topLosersWidget->clearContents();
     topLosersWidget->setRowCount(0);
 
-    // Настройка заголовков столбцов
     topLosersWidget->setColumnCount(4);
     topLosersWidget->setHorizontalHeaderLabels(QStringList() << "Icon" << "Symbol Code" << "Price" << "Change");
 
-    // Собираем данные для сортировки
     QList<QPair<double, int>> changes;
     int rowCount = tableWidget->rowCount();
     for (int i = 0; i < rowCount; ++i) {
-        QTableWidgetItem* changeItem = tableWidget->item(i, 3); // Предполагаем, что столбец изменения цены — это четвертый столбец
+        QTableWidgetItem* changeItem = tableWidget->item(i, 3);
         if (changeItem) {
             double change = changeItem->text().remove('%').toDouble();
             changes.append(qMakePair(change, i));
         }
     }
 
-    // Сортировка данных по убыванию
     std::sort(changes.begin(), changes.end(), [](const QPair<double, int>& a, const QPair<double, int>& b) {
-        return a.first < b.first;  // Сортировка по убыванию
+        return a.first < b.first;
     });
 
-    // Ограничиваем количество отображаемых элементов до трех
     int displayCount = qMin(changes.size(), 3);
-
-    // Заполняем topLosersWidget отсортированными данными
     for (int i = 0; i < displayCount; ++i) {
         int newRow = topLosersWidget->rowCount();
         topLosersWidget->insertRow(newRow);
 
-        // Копирование иконки из tableWidget
-        QLabel* iconLabel = qobject_cast<QLabel*>(tableWidget->cellWidget(changes[i].second, 0)); // Первый столбец предположительно содержит иконку
+        QLabel* iconLabel = qobject_cast<QLabel*>(tableWidget->cellWidget(changes[i].second, 0));
         if (iconLabel && !iconLabel->pixmap().isNull()) {
             QLabel* newIconLabel = new QLabel;
-            newIconLabel->setPixmap(iconLabel->pixmap().copy());  // Копирование QPixmap
+            newIconLabel->setPixmap(iconLabel->pixmap().copy());
             newIconLabel->setAlignment(Qt::AlignCenter);
             topLosersWidget->setCellWidget(newRow, 0, newIconLabel);
         } else {
-            // Устанавливаем пустую ячейку или текст "No icon"
             topLosersWidget->setCellWidget(newRow, 0, new QLabel("No icon"));
         }
 
-        // Копирование символа, цены, изменения
         QString symbolFull = tableWidget->item(changes[i].second, 1)->text();
-        QString symbolCode = symbolFull.section('(', 1, 1).section(')', 0, 0); // Извлечение кода символа из полного имени
+        QString symbolCode = symbolFull.section('(', 1, 1).section(')', 0, 0);
 
         QTableWidgetItem* symbolCodeItem = new QTableWidgetItem(symbolCode);
         symbolCodeItem->setTextAlignment(Qt::AlignCenter);
-        QTableWidgetItem* priceItem = tableWidget->item(changes[i].second, 2)->clone(); // Третий столбец - цена
-        QTableWidgetItem* changeItem = tableWidget->item(changes[i].second, 3)->clone(); // Четвертый столбец - изменение
+        QTableWidgetItem* priceItem = tableWidget->item(changes[i].second, 2)->clone();
+        QTableWidgetItem* changeItem = tableWidget->item(changes[i].second, 3)->clone();
 
-        // Копирование формата (цвет текста) для изменения
         changeItem->setForeground(tableWidget->item(changes[i].second, 3)->foreground());
 
         topLosersWidget->setItem(newRow, 1, symbolCodeItem);
@@ -360,68 +368,55 @@ void MainWindow::updateTopLosersWidget(QTableWidget* tableWidget, QTableWidget* 
     }
 }
 
-
 void MainWindow::updateTopGainersWidget(QTableWidget* tableWidget, QTableWidget* topGainersWidget) {
-
     ui->topGainersWidget->setColumnWidth(0, 40);
     ui->topGainersWidget->setColumnWidth(1, 50);
     ui->topGainersWidget->setColumnWidth(2, 70);
     ui->topGainersWidget->setColumnWidth(3, 70);
 
-    // Очистка текущих данных в topLosersWidget
     topGainersWidget->clearContents();
     topGainersWidget->setRowCount(0);
 
-    // Настройка заголовков столбцов
     topGainersWidget->setColumnCount(4);
     topGainersWidget->setHorizontalHeaderLabels(QStringList() << "Icon" << "Symbol Code" << "Price" << "Change");
 
-    // Собираем данные для сортировки
     QList<QPair<double, int>> changes;
     int rowCount = tableWidget->rowCount();
     for (int i = 0; i < rowCount; ++i) {
-        QTableWidgetItem* changeItem = tableWidget->item(i, 3); // Предполагаем, что столбец изменения цены — это четвертый столбец
+        QTableWidgetItem* changeItem = tableWidget->item(i, 3);
         if (changeItem) {
             double change = changeItem->text().remove('%').toDouble();
             changes.append(qMakePair(change, i));
         }
     }
 
-    // Сортировка данных по убыванию
     std::sort(changes.begin(), changes.end(), [](const QPair<double, int>& a, const QPair<double, int>& b) {
-        return a.first > b.first;  // Сортировка по убыванию
+        return a.first > b.first;
     });
 
-    // Ограничиваем количество отображаемых элементов до трех
     int displayCount = qMin(changes.size(), 3);
-
-    // Заполняем topLosersWidget отсортированными данными
     for (int i = 0; i < displayCount; ++i) {
         int newRow = topGainersWidget->rowCount();
         topGainersWidget->insertRow(newRow);
 
-        // Копирование иконки из tableWidget
-        QLabel* iconLabel = qobject_cast<QLabel*>(tableWidget->cellWidget(changes[i].second, 0)); // Первый столбец предположительно содержит иконку
+        QLabel* iconLabel = qobject_cast<QLabel*>(tableWidget->cellWidget(changes[i].second, 0));
         if (iconLabel && !iconLabel->pixmap().isNull()) {
             QLabel* newIconLabel = new QLabel;
-            newIconLabel->setPixmap(iconLabel->pixmap().copy());  // Копирование QPixmap
+            newIconLabel->setPixmap(iconLabel->pixmap().copy());
             newIconLabel->setAlignment(Qt::AlignCenter);
             topGainersWidget->setCellWidget(newRow, 0, newIconLabel);
         } else {
-            // Устанавливаем пустую ячейку или текст "No icon"
             topGainersWidget->setCellWidget(newRow, 0, new QLabel("No icon"));
         }
 
-        // Копирование символа, цены, изменения
         QString symbolFull = tableWidget->item(changes[i].second, 1)->text();
-        QString symbolCode = symbolFull.section('(', 1, 1).section(')', 0, 0); // Извлечение кода символа из полного имени
+        QString symbolCode = symbolFull.section('(', 1, 1).section(')', 0, 0);
 
         QTableWidgetItem* symbolCodeItem = new QTableWidgetItem(symbolCode);
         symbolCodeItem->setTextAlignment(Qt::AlignCenter);
-        QTableWidgetItem* priceItem = tableWidget->item(changes[i].second, 2)->clone(); // Третий столбец - цена
-        QTableWidgetItem* changeItem = tableWidget->item(changes[i].second, 3)->clone(); // Четвертый столбец - изменение
+        QTableWidgetItem* priceItem = tableWidget->item(changes[i].second, 2)->clone();
+        QTableWidgetItem* changeItem = tableWidget->item(changes[i].second, 3)->clone();
 
-        // Копирование формата (цвет текста) для изменения
         changeItem->setForeground(tableWidget->item(changes[i].second, 3)->foreground());
 
         topGainersWidget->setItem(newRow, 1, symbolCodeItem);
@@ -436,68 +431,55 @@ void MainWindow::updateTopVolumeWidget(QTableWidget* tableWidget, QTableWidget* 
     ui->topVolumeWidget->setColumnWidth(2, 70);
     ui->topVolumeWidget->setColumnWidth(3, 70);
 
-    // Очистка текущих данных в topVolumeWidget
     topVolumeWidget->clearContents();
     topVolumeWidget->setRowCount(0);
 
-    // Настройка заголовков столбцов
     topVolumeWidget->setColumnCount(4);
     topVolumeWidget->setHorizontalHeaderLabels(QStringList() << "Top Volume");
 
-    // Собираем данные для сортировки
     QList<QPair<double, int>> volumes;
     int rowCount = tableWidget->rowCount();
     for (int i = 0; i < rowCount; ++i) {
-        QTableWidgetItem* volumeItem = tableWidget->item(i, 4); // Предполагаем, что столбец объема в USDT — это пятый столбец
+        QTableWidgetItem* volumeItem = tableWidget->item(i, 4);
         if (volumeItem) {
             QString volumeText = volumeItem->text();
-            volumeText.remove('$'); // Удаление знака доллара
+            volumeText.remove('$');
             double volume = volumeText.toDouble();
             volumes.append(qMakePair(volume, i));
         }
     }
 
-    // Сортировка данных по убыванию объема
     std::sort(volumes.begin(), volumes.end(), [](const QPair<double, int>& a, const QPair<double, int>& b) {
-        return a.first > b.first;  // Сортировка по убыванию
+        return a.first > b.first;
     });
 
-    // Ограничиваем количество отображаемых элементов до трех
     int displayCount = qMin(volumes.size(), 3);
-
-    // Заполняем topVolumeWidget отсортированными данными
     for (int i = 0; i < displayCount; ++i) {
         int newRow = topVolumeWidget->rowCount();
         topVolumeWidget->insertRow(newRow);
 
-        // Копирование иконки из tableWidget
-        QLabel* iconLabel = qobject_cast<QLabel*>(tableWidget->cellWidget(volumes[i].second, 0)); // Первый столбец предположительно содержит иконку
+        QLabel* iconLabel = qobject_cast<QLabel*>(tableWidget->cellWidget(volumes[i].second, 0));
         if (iconLabel && !iconLabel->pixmap().isNull()) {
             QLabel* newIconLabel = new QLabel;
-            newIconLabel->setPixmap(iconLabel->pixmap().copy());  // Копирование QPixmap
+            newIconLabel->setPixmap(iconLabel->pixmap().copy());
             newIconLabel->setAlignment(Qt::AlignCenter);
             topVolumeWidget->setCellWidget(newRow, 0, newIconLabel);
         } else {
-            // Устанавливаем пустую ячейку или текст "No icon"
             topVolumeWidget->setCellWidget(newRow, 0, new QLabel("No icon"));
         }
 
-        // Копирование символа, цены, изменения
         QString symbolFull = tableWidget->item(volumes[i].second, 1)->text();
-        QString symbolCode = symbolFull.section('(', 1, 1).section(')', 0, 0); // Извлечение кода символа из полного имени
+        QString symbolCode = symbolFull.section('(', 1, 1).section(')', 0, 0);
 
         QTableWidgetItem* symbolCodeItem = new QTableWidgetItem(symbolCode);
         symbolCodeItem->setTextAlignment(Qt::AlignCenter);
 
-        // Форматирование цены и объема
         double price = tableWidget->item(volumes[i].second, 2)->text().remove('$').toDouble();
         QString priceFormatted = formatWithSuffix(price);
         QTableWidgetItem* priceItem = new QTableWidgetItem(priceFormatted);
         priceItem->setTextAlignment(Qt::AlignCenter);
 
-        QTableWidgetItem* changeItem = tableWidget->item(volumes[i].second, 3)->clone(); // Четвертый столбец - изменение
-
-
+        QTableWidgetItem* changeItem = tableWidget->item(volumes[i].second, 3)->clone();
 
         topVolumeWidget->setItem(newRow, 1, symbolCodeItem);
         topVolumeWidget->setItem(newRow, 2, priceItem);

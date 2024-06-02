@@ -52,9 +52,9 @@
    <property name="geometry">
     <rect>
      <x>570</x>
-     <y>380</y>
+     <y>340</y>
      <width>321</width>
-     <height>61</height>
+     <height>71</height>
     </rect>
    </property>
    <property name="font">
@@ -71,9 +71,9 @@
    <property name="geometry">
     <rect>
      <x>570</x>
-     <y>300</y>
+     <y>260</y>
      <width>321</width>
-     <height>61</height>
+     <height>71</height>
     </rect>
    </property>
    <property name="font">
@@ -88,14 +88,14 @@
     <string/>
    </property>
    <property name="placeholderText">
-    <string>Enter Amount</string>
+    <string>Enter Amount (USD)</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_2">
    <property name="geometry">
     <rect>
      <x>560</x>
-     <y>240</y>
+     <y>200</y>
      <width>161</width>
      <height>41</height>
     </rect>
@@ -114,7 +114,7 @@
    <property name="geometry">
     <rect>
      <x>740</x>
-     <y>240</y>
+     <y>200</y>
      <width>161</width>
      <height>41</height>
     </rect>
@@ -129,15 +129,24 @@
     <string>SELL</string>
    </property>
   </widget>
-  <widget class="QTableWidget" name="tableWidget">
+  <widget class="QTableWidget" name="cryptoTableWidget">
    <property name="geometry">
     <rect>
      <x>60</x>
      <y>240</y>
      <width>381</width>
-     <height>401</height>
+     <height>212</height>
     </rect>
    </property>
+   <property name="showGrid">
+    <bool>false</bool>
+   </property>
+   <attribute name="horizontalHeaderVisible">
+    <bool>false</bool>
+   </attribute>
+   <attribute name="verticalHeaderVisible">
+    <bool>false</bool>
+   </attribute>
   </widget>
   <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
@@ -245,11 +254,44 @@
   <widget class="QComboBox" name="cryptoComboBox">
    <property name="geometry">
     <rect>
-     <x>640</x>
-     <y>460</y>
-     <width>161</width>
+     <x>774</x>
+     <y>375</y>
+     <width>121</width>
      <height>41</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>150</y>
+     <width>211</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Baloo Bhaina 2</family>
+     <pointsize>36</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Buy Crypto</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>220</y>
+     <width>101</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Hot Cryptos</string>
    </property>
   </widget>
  </widget>

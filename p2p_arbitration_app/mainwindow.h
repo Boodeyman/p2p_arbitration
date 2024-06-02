@@ -12,8 +12,7 @@
 #include "ui_mainwindow.h"
 
 extern int counter;
-// const QString proxiesPath = "/Users/Admin/Desktop/HSE/p2p_fullparsing/p2p_arbitration_app/proxies.txt";
-// const QString databasePath = "/Users/Admin/Desktop/HSE/p2p_fullparsing/p2p_arbitration_app/users.db";
+
 namespace Ui {
 class MainWindow;
 }
@@ -28,7 +27,6 @@ public:
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
 
-
 private slots:
     void updateCryptoData(const QString &symbol, const QJsonObject &data);
     void requestData();
@@ -38,7 +36,6 @@ private slots:
     void logout();
     void hideLineEdit();
     void openBuyCrypto();
-
     void on_themeChange_clicked();
 
 private:
@@ -47,13 +44,12 @@ private:
     Scraper *scraper;
     QTimer *timer;
     QTimer *proxyChangeTimer;
-    QTimer *hideTimer;  // Таймер для скрытия lineEdit
+    QTimer *hideTimer;
     QMap<QString, int> symbolToRowMap;
     buycrypto *buycrypto;
     QString formatWithSuffix(double num);
     QString proxiesPath;
     QString databasePath;
-
 
     void setupTableWidget();
     void setupCryptoRows();
@@ -61,7 +57,7 @@ private:
     void updateTopLosersWidget(QTableWidget* tableWidget, QTableWidget* topLosersWidget);
     void updateTopGainersWidget(QTableWidget* tableWidget, QTableWidget* topGainersWidget);
     void updateTopVolumeWidget(QTableWidget* tableWidget, QTableWidget* topVolumeWidget);
-
+    void updateBuyCryptoData(const QString &symbol, double price, double change, double volume);
 };
 
 #endif // MAINWINDOW_H

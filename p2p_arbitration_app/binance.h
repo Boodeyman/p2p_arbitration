@@ -32,7 +32,7 @@ private:
     void loadProxiesFromFile();
 
     QMap<QString, int> retryCountMap;
-    const int maxRetries = 3;
+    const int maxRetries = 10;
     int pendingRequests;
     Scraper *scraper;
     QNetworkAccessManager *manager;
