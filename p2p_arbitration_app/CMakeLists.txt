@@ -1,4 +1,3 @@
-# Указание минимальной версии CMake
 cmake_minimum_required(VERSION 3.5)
 
 # Установка имени и версии проекта
@@ -34,8 +33,10 @@ find_package(CURL REQUIRED)
 message(STATUS "Using Qt version: ${Qt${QT_VERSION_MAJOR}_VERSION}")
 message(STATUS "CURL found: ${CURL_FOUND}")
 
+# Установка RPATH для поиска библиотек в пакете приложения
 set(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks")
 set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # Источники проекта
 set(PROJECT_SOURCES
@@ -60,9 +61,6 @@ set(PROJECT_SOURCES
     ${app_icon_macos}
     ${proxies_macos}
     ${database_macos}
-    # ${CMAKE_CURRENT_SOURCE_DIR}/resources/proxies.txt
-    # ${CMAKE_CURRENT_SOURCE_DIR}/resources/users.db
-
 )
 
 # Указание директорий для include
@@ -85,7 +83,6 @@ if(${QT_VERSION_MAJOR} VERSION_GREATER_EQUAL 6)
         icons/icon_of_app_1.png
         icons/dark.png
         icons/light.png
-        icons/light.png
         resources/icon_of_app.ico
         resources/users.db
         resources/proxies.txt
@@ -101,22 +98,23 @@ endif()
 # Линковка с библиотеками Qt и CURL
 target_link_libraries(p2p_arbitration_app PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Sql CURL::libcurl)
 
-# Директории для установки
-# include(GNUInstallDirs)
-#[[set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE)]] #"/Users/Admin/Desktop/HSE/p2p_fullparsing/build-p2p_arbitration_app-Desktop_arm_darwin_generic_mach_o_64bit-Release")]]
+# Указание директории для установки
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 install(TARGETS p2p_arbitration_app
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}
+    RUNTIME DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )
 
 # Копирование файлов ресурсов в пакет приложения
-# install(FILES
-#     ${CMAKE_CURRENT_SOURCE_DIR}/resources/proxies.txt
-#     ${CMAKE_CURRENT_SOURCE_DIR}/resources/users.db
-#     DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}/p2p_arbitration_app.app/Contents/Resources"
-# )
+install(FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/resources/proxies.txt
+    ${CMAKE_CURRENT_SOURCE_DIR}/resources/users.db
+    DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p2p_arbitration_app.app/Contents/Resources"
+)
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(p2p_arbitration_app)
