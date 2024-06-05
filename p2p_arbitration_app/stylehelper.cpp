@@ -1,5 +1,5 @@
 #include "stylehelper.h"
-
+#include "mainwindow.h"
 #include <QWidget>
 #include <QPalette>
 #include <QColor>
@@ -41,12 +41,30 @@ void setDarkStyle(QWidget *widget) {
             "}"
             );
     }
+    if (QTableWidget *topGainersWidget = qobject_cast<QTableWidget *>(widget)) {
+        topGainersWidget->setStyleSheet(
+            "QTableWidget {"
+            "    background-color: #16181c;"
+            "    color: #cccccc;"
+            "    gridline-color: #444444;"
+            "}"
+            "QTableWidget QHeaderView::section {"
+            "    background-color: #16181c;"
+            "    color: #cccccc;"
+            "    border: 1px solid #444444;"
+            "}"
+            "QTableWidget::item {"
+            "    background-color: #16181c;"
+            "    color: #cccccc;"
+            "}"
+            );
+    }
     if (QComboBox *comboBox = qobject_cast<QComboBox *>(widget)) {
         comboBox->setStyleSheet(
             "QComboBox {"
             "    background-color: #16181c;"
             "    color: #cccccc;"
-            "    border: 1px solid #444444;"
+            "    padding: 10px;"
             "}"
             "QComboBox QAbstractItemView {"
             "    background-color: #16181c;"
@@ -57,12 +75,11 @@ void setDarkStyle(QWidget *widget) {
             "QComboBox::drop-down {"
             "    subcontrol-origin: padding;"
             "    subcontrol-position: top right;"
-            "    border-left: 1px solid #444444;"
             "    background-color: #16181c;"
             "}"
             "QComboBox::down-arrow {"
             "    image: url(:/icons/icons/arrowWhite.png);"
-            "    width: 12px;"
+            "    width: 20px;"
             "}"
             );
     }
@@ -91,7 +108,7 @@ void setLightStyle(QWidget *widget) {
     if (QTableWidget *tableWidget = qobject_cast<QTableWidget *>(widget)) {
         tableWidget->setStyleSheet(
             "QTableWidget {"
-            "    background-color: #ffffff;"
+            "    background-color: #f5f5f5;"
             "    color: #404040;"
             "    gridline-color: #d6d6d6;"
             "}"
@@ -101,7 +118,26 @@ void setLightStyle(QWidget *widget) {
             "    border: 1px solid #d6d6d6;"
             "}"
             "QTableWidget::item {"
-            "    background-color: #ffffff;"
+            "    background-color: #f5f5f5;"
+            "    color: #404040;"
+            "}"
+            );
+    }
+    if (QTableWidget *topGainersWidget = qobject_cast<QTableWidget *>(widget)) {
+        topGainersWidget->setStyleSheet(
+            "QTableWidget {"
+            "    background-color: #f5f5f5;"
+            "    color: #404040;"
+            "    gridline-color: #d6d6d6;"
+            "    border-radius: 15px;"
+            "}"
+            "QTableWidget QHeaderView::section {"
+            "    background-color: #f5f5f5;"
+            "    color: #404040;"
+            "    border: 1px solid #d6d6d6;"
+            "}"
+            "QTableWidget::item {"
+            "    background-color: #f5f5f5;"
             "    color: #404040;"
             "}"
             );
@@ -109,12 +145,12 @@ void setLightStyle(QWidget *widget) {
     if (QComboBox *comboBox = qobject_cast<QComboBox *>(widget)) {
         comboBox->setStyleSheet(
             "QComboBox {"
-            "    background-color: #ffffff;"
+            "    background-color: #f5f5f5;"
             "    color: #404040;"
-            "    border: 1px solid #d6d6d6;"
+            "    padding: 10px;"
             "}"
             "QComboBox QAbstractItemView {"
-            "    background-color: #ffffff;"
+            "    background-color: #f5f5f5;"
             "    color: #404040;"
             "    selection-background-color: #a6c8ff;"
             "    selection-color: #404040;"
@@ -122,12 +158,11 @@ void setLightStyle(QWidget *widget) {
             "QComboBox::drop-down {"
             "    subcontrol-origin: padding;"
             "    subcontrol-position: top right;"
-            "    border-left: 1px solid #d6d6d6;"
-            "    background-color: #ffffff;"
+            "    background-color: #f5f5f5;"
             "}"
             "QComboBox::down-arrow {"
             "    image: url(:/icons/icons/arrowBlack.png);"
-            "    width: 12px;"
+            "    width: 20px;"
             "}"
             );
     }

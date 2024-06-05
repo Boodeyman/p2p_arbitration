@@ -12,6 +12,7 @@
 #include "ui_mainwindow.h"
 
 extern int counter;
+extern double changePercent;
 const QString proxiesPath = "/Users/artur/p2p_arbitration/p2p_arbitration_app/proxies.txt";
 const QString databasePath = "/Users/artur/users.db";
 namespace Ui {

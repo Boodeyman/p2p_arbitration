@@ -39,6 +39,7 @@ void buycrypto::changeTheme(int counter)
 {
     if (counter % 2 == 0) {
         setDarkStyle(this);
+        ui->homeButton->setIcon(QIcon(":/icons/icons/homeWhite.png"));
         ui->homeButton->setStyleSheet(
             "QPushButton {"
             "   color: #ffffff;"
@@ -50,6 +51,7 @@ void buycrypto::changeTheme(int counter)
     }
     else {
         setLightStyle(this);
+        ui->homeButton->setIcon(QIcon(":/icons/icons/homeBlack.png"));
         ui->homeButton->setStyleSheet(
             "QPushButton {"
             "   color: #16181c;"

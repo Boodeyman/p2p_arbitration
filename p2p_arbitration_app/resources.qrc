@@ -32,11 +32,6 @@
         <file>icons/SEIUSDT.png</file>
         <file>icons/TAOUSDT.png</file>
         <file>icons/SUIUSDT.png</file>
-        <file>icons/hoverbuttonicon.png</file>
-        <file>icons/searchLine.png</file>
-        <file>icons/logout.png</file>
-        <file>icons/interface.png</file>
-        <file>icons/logout_1.png</file>
         <file>icons/icon_of_app.png</file>
         <file>icons/icon_of_app_1.png</file>
         <file>icons/dark.png</file>
@@ -49,5 +44,8 @@
         <file>icons/arrowWhite.png</file>
         <file>icons/logoutBlack.png</file>
         <file>icons/logoutWhite.png</file>
+        <file>icons/homeBlack.png</file>
+        <file>icons/homeWhite.png</file>
+        <file>icons/searchHover.png</file>
     </qresource>
 </RCC>
