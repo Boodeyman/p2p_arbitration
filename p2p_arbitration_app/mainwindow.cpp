@@ -12,11 +12,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QTimer>
-// #include <QApplication>
-// #include <QMainWindow>
-// #include <QTableWidget>
-// #include <QVBoxLayout>
-// #include <QHeaderView>
+#include <QCoreApplication>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -27,16 +23,19 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QString basePath = QCoreApplication::applicationDirPath();
+
+    proxiesPath = basePath + "/../Resources/proxies.txt";
+    databasePath = basePath + "/../Resources/users.db";
+
     connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::openBuyCrypto);
 
     setupTableWidget();
     setupCryptoRows();
-    // Устанавливаем фильтр событий для hoverButton и lineEdit
     ui->hoverButton->installEventFilter(this);
     ui->lineEdit->installEventFilter(this);
-    ui->lineEdit->setVisible(false); // Изначально скрываем lineEdit
+    ui->lineEdit->setVisible(false);
 
-    // Создаем таймер для скрытия lineEdit
     hideTimer = new QTimer(this);
     hideTimer->setSingleShot(true);
     connect(hideTimer, &QTimer::timeout, this, &MainWindow::hideLineEdit);
@@ -55,7 +54,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(api, &BinanceAPI::cryptoDataReady, this, &MainWindow::updateCryptoData);
     connect(api, &BinanceAPI::errorOccurred, this, [](const QString &error) {
-        // Handle error
     });
 
     loadProxiesFromFile();
@@ -86,10 +84,9 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event) {
     if (watched == ui->hoverButton || watched == ui->lineEdit) {
         if (event->type() == QEvent::Enter) {
             ui->lineEdit->setVisible(true);
-
-            hideTimer->stop();  // Останавливаем таймер, если он запущен
+            hideTimer->stop();
         } else if (event->type() == QEvent::Leave) {
-            hideTimer->start(250);  // Запускаем таймер на 0.25 секунду
+            hideTimer->start(250);
         }
     } else if (event->type() == QEvent::MouseButtonPress) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
@@ -101,7 +98,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event) {
 }
 
 void MainWindow::hideLineEdit() {
-    if (!ui->lineEdit->hasFocus() && !ui->lineEdit->underMouse()) {  // Проверяем, есть ли фокус на lineEdit или наведение
+    if (!ui->lineEdit->hasFocus() && !ui->lineEdit->underMouse()) {
         ui->lineEdit->setVisible(false);
     }
 }
@@ -123,10 +120,9 @@ void MainWindow::onRowSelected() {
 }
 
 void MainWindow::requestData() {
-    QVector<QString> cryptos = {"BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "ATOMUSDT", "LTCUSDT", "SHIBUSDT", "AVAXUSDT", "TRXUSDT", "DOTUSDT", "NEARUSDT", "MATICUSDT", "ICPUSDT", "UNIUSDT", "RNDRUSDT", "APTUSDT", "IMXUSDT", "ARUSDT", "XLMUSDT", "WIFUSDT", "FTMUSDT", "OPUSDT", "TAOUSDT", "SUIUSDT", "INJUSDT", "RUNEUSDT", "FLOKIUSDT", "SEIUSDT"};
+    QVector<QString> cryptos = {"BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "ATOMUSDT", "LTCUSDT", "SHIBUSDT", "AVAXUSDT", "TRXUSDT", "DOTUSDT", "NEARUSDT", "MATICUSDT", "ICPUSDT", "UNIUSDT", "RNDRUSDT", "APTUSDT", "IMXUSDT", "ARUSDT", "XLMUSDT", "FTMUSDT", "OPUSDT", "TAOUSDT", "SUIUSDT", "INJUSDT", "RUNEUSDT", "FLOKIUSDT", "SEIUSDT", "BONKUSDT", "LDOUSDT", "TIAUSDT", "JASMYUSDT", "NOTUSDT", "AAVEUSDT"};
     api->getCrypto(cryptos);
 }
-
 
 void MainWindow::setupTableWidget() {
     ui->tableWidget->setColumnCount(6);
@@ -135,6 +131,11 @@ void MainWindow::setupTableWidget() {
 
     // Устанавливаем фиксированную ширину для первой колонки
     ui->tableWidget->setColumnWidth(0, 40);
+    ui->tableWidget->setColumnWidth(1, 200);
+    ui->tableWidget->setColumnWidth(2, 200);
+    ui->tableWidget->setColumnWidth(3, 70);
+    ui->tableWidget->setColumnWidth(4, 200);
+    ui->tableWidget->setColumnWidth(5, 150);
 
     // Устанавливаем режим изменения размера колонок для других колонок
     for (int i = 1; i < ui->tableWidget->columnCount(); ++i) {
@@ -151,14 +152,12 @@ void MainWindow::setupTableWidget() {
 }
 
 void MainWindow::setupCryptoRows() {
-    QStringList cryptos = {"BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "ATOMUSDT", "LTCUSDT", "SHIBUSDT", "AVAXUSDT", "TRXUSDT", "DOTUSDT", "NEARUSDT", "MATICUSDT", "ICPUSDT", "UNIUSDT", "RNDRUSDT", "APTUSDT", "IMXUSDT", "ARUSDT", "XLMUSDT", "WIFUSDT", "FTMUSDT", "OPUSDT", "TAOUSDT", "SUIUSDT", "INJUSDT", "RUNEUSDT", "FLOKIUSDT", "SEIUSDT"};
+    QStringList cryptos = {"BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "ATOMUSDT", "LTCUSDT", "SHIBUSDT", "AVAXUSDT", "TRXUSDT", "DOTUSDT", "NEARUSDT", "MATICUSDT", "ICPUSDT", "UNIUSDT", "RNDRUSDT", "APTUSDT", "IMXUSDT", "ARUSDT", "XLMUSDT", "FTMUSDT", "OPUSDT", "TAOUSDT", "SUIUSDT", "INJUSDT", "RUNEUSDT", "FLOKIUSDT", "SEIUSDT", "BONKUSDT", "LDOUSDT", "TIAUSDT", "JASMYUSDT", "NOTUSDT", "AAVEUSDT"};
     for (int i = 0; i < cryptos.size(); ++i) {
         symbolToRowMap[cryptos[i]] = i;
         ui->tableWidget->insertRow(i);
     }
 }
-
-
 
 void MainWindow::updateCryptoData(const QString &symbol, const QJsonObject &data) {
     if (data["success"].toBool()) {
@@ -207,15 +206,23 @@ void MainWindow::updateCryptoData(const QString &symbol, const QJsonObject &data
         ui->tableWidget->setItem(row, 4, volumeUsdtItem);
         ui->tableWidget->setItem(row, 5, volumeCryptoItem);
 
+        updateBuyCryptoData(symbol, currentPrice, changePercent, volumeInUSDT); // Передача данных в buycrypto
+
         updateTopLosersWidget(ui->tableWidget, ui->topLosersWidget);
         updateTopGainersWidget(ui->tableWidget, ui->topGainersWidget);
         updateTopVolumeWidget(ui->tableWidget, ui->topVolumeWidget);
-
-
     } else {
         // Handle error
     }
 }
+
+void MainWindow::updateBuyCryptoData(const QString &symbol, double price, double change, double volume) {
+    if (buycrypto) {
+        buycrypto->updateCryptoData(symbol, price, change, volume);
+    }
+}
+
+
 
 void MainWindow::sortByChangeColumn(int column) {
     if (column == 3) {
@@ -257,9 +264,8 @@ void MainWindow::openBuyCrypto()
     this -> show();
 }
 
-
-
 int counter = 0;
+
 void MainWindow::on_themeChange_clicked()
 {
     counter ++;
@@ -276,11 +282,25 @@ void MainWindow::on_themeChange_clicked()
             "   color: #eba613;"
             "}"
             );
+        ui->pushButton->setStyleSheet(
+            "QPushButton {"
+            "   color: #ffffff;"
+            "}"
+            "QPushButton:hover {"
+            "   color: #eba613;"
+            "}"
+            );
+        ui->tableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section { background-color: #16181c; color: #ffffff; }");
+        ui->pushButton->setStyleSheet(
+            "QPushButton {"
+            "    color: #ffffff;"
+            "}"
+            "QPushButton:hover {"
+            "    color: #eba613;"
+            "}");
         setDarkStyle(this);
-        setDarkStyle(ui->topGainersWidget);
         setDarkStyle(ui->tableWidget);
         setDarkStyle(ui->comboBox);
-        setDarkStyle(ui->comboBox_2);
     }
     else {
         ui->themeChange->setIcon(QIcon(":/icons/icons/light.png"));
@@ -295,14 +315,27 @@ void MainWindow::on_themeChange_clicked()
             "   color: #eba613;"
             "}"
             );
+        ui->pushButton->setStyleSheet(
+            "QPushButton {"
+            "   color: #16181c;"
+            "}"
+            "QPushButton:hover {"
+            "   color: #eba613;"
+            "}"
+            );
+        ui->tableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section { background-color: #f5f5f5; color: #16181c; }");
+        ui->pushButton_2->setStyleSheet(
+            "QPushButton {"
+            "    color: #16181c;"
+            "}"
+            "QPushButton:hover {"
+            "    color: #eba613;"
+            "}");
         setLightStyle(this);
         setLightStyle(ui->tableWidget);
-        setLightStyle(ui->topGainersWidget);
-        setLightStyle(ui->comboBox);
-        setLightStyle(ui->comboBox_2);
+        setLightStyle(ui->comboBox);    
     }
 }
-
 
 QString MainWindow::formatWithSuffix(double num) {
     if (num >= 1'000'000) {
@@ -314,12 +347,10 @@ QString MainWindow::formatWithSuffix(double num) {
     }
 }
 
-
 void MainWindow::updateTopLosersWidget(QTableWidget* tableWidget, QTableWidget* topLosersWidget) {
     // Устанавливаем режим изменения размера всех столбцов в режим QHeaderView::Stretch
     topLosersWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-    // Остальной код без изменений
     ui->topLosersWidget->setColumnWidth(0, 40);
     ui->topLosersWidget->setColumnWidth(1, 50);
     ui->topLosersWidget->setColumnWidth(2, 70);
@@ -337,9 +368,11 @@ void MainWindow::updateTopLosersWidget(QTableWidget* tableWidget, QTableWidget* 
             changes.append(qMakePair(change, i));
         }
     }
+
     std::sort(changes.begin(), changes.end(), [](const QPair<double, int>& a, const QPair<double, int>& b) {
         return a.first < b.first;
     });
+
     int displayCount = qMin(changes.size(), 3);
     for (int i = 0; i < displayCount; ++i) {
         int newRow = topLosersWidget->rowCount();
@@ -369,8 +402,6 @@ void MainWindow::updateTopLosersWidget(QTableWidget* tableWidget, QTableWidget* 
 void MainWindow::updateTopGainersWidget(QTableWidget* tableWidget, QTableWidget* topGainersWidget) {
     // Устанавливаем режим изменения размера всех столбцов в режим QHeaderView::Stretch
     topGainersWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-
-    // Остальной код без изменений
     ui->topGainersWidget->setColumnWidth(0, 40);
     ui->topGainersWidget->setColumnWidth(1, 50);
     ui->topGainersWidget->setColumnWidth(2, 70);
@@ -388,9 +419,11 @@ void MainWindow::updateTopGainersWidget(QTableWidget* tableWidget, QTableWidget*
             changes.append(qMakePair(change, i));
         }
     }
+
     std::sort(changes.begin(), changes.end(), [](const QPair<double, int>& a, const QPair<double, int>& b) {
         return a.first > b.first;
     });
+
     int displayCount = qMin(changes.size(), 3);
     for (int i = 0; i < displayCount; ++i) {
         int newRow = topGainersWidget->rowCount();

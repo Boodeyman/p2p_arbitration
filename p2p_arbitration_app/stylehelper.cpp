@@ -22,7 +22,6 @@ void setDarkStyle(QWidget *widget) {
 
     widget->setPalette(darkPalette);
 
-    // Специфические стили для QTableWidget
     if (QTableWidget *tableWidget = qobject_cast<QTableWidget *>(widget)) {
         tableWidget->setStyleSheet(
             "QTableWidget {"
@@ -104,7 +103,6 @@ void setLightStyle(QWidget *widget) {
 
     widget->setPalette(lightPalette);
 
-    // Специфические стили для QTableWidget
     if (QTableWidget *tableWidget = qobject_cast<QTableWidget *>(widget)) {
         tableWidget->setStyleSheet(
             "QTableWidget {"

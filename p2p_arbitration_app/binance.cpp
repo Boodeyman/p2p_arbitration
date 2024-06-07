@@ -8,9 +8,14 @@
 #include <QJsonObject>
 #include <QJsonParseError>
 #include <QDebug>
+#include <QCoreApplication>
 
 BinanceAPI::BinanceAPI(QObject *parent) : QObject(parent), scraper(nullptr), currentProxyIndex(0) {
     manager = new QNetworkAccessManager(this);
+
+    QString basePath = QCoreApplication::applicationDirPath();
+    proxiesPath1 = basePath + "/../Resources/proxies.txt";
+
     loadProxiesFromFile();
     setNextProxy();
     connect(manager, &QNetworkAccessManager::finished, this, &BinanceAPI::onReplyFinished);
@@ -59,16 +64,17 @@ void BinanceAPI::getCrypto(const QVector<QString> &cryptos) {
         return;
     }
 
-    pendingRequests = cryptos.size(); // Initialize pending requests counter
+    pendingRequests = cryptos.size();
 
     for (const auto &crypto : cryptos) {
-        retryCountMap[crypto] = 0; // Initialize retry count for each crypto symbol
+        retryCountMap[crypto] = 0;
         QString url = QString("https://www.binance.com/bapi/asset/v2/public/asset-service/product/get-product-by-symbol?symbol=%1").arg(crypto);
         QNetworkRequest request((QUrl(url)));
         request.setAttribute(QNetworkRequest::User, crypto);
         manager->get(request);
     }
 }
+
 
 void BinanceAPI::onReplyFinished(QNetworkReply *reply) {
     QString symbol = reply->request().attribute(QNetworkRequest::User).toString();
@@ -77,7 +83,7 @@ void BinanceAPI::onReplyFinished(QNetworkReply *reply) {
     if (reply->error() != QNetworkReply::NoError) {
         if (retryCountMap[symbol] < maxRetries) {
             retryCountMap[symbol]++;
-            setNextProxy(); // Переключаемся на следующий прокси
+            setNextProxy();
             QString url = QString("https://www.binance.com/bapi/asset/v2/public/asset-service/product/get-product-by-symbol?symbol=%1").arg(symbol);
             QNetworkRequest request((QUrl(url)));
             request.setAttribute(QNetworkRequest::User, symbol);
@@ -92,7 +98,7 @@ void BinanceAPI::onReplyFinished(QNetworkReply *reply) {
     if (data.isEmpty()) {
         if (retryCountMap[symbol] < maxRetries) {
             retryCountMap[symbol]++;
-            setNextProxy(); // Переключаемся на следующий прокси
+            setNextProxy();
             QString url = QString("https://www.binance.com/bapi/asset/v2/public/asset-service/product/get-product-by-symbol?symbol=%1").arg(symbol);
             QNetworkRequest request((QUrl(url)));
             request.setAttribute(QNetworkRequest::User, symbol);
@@ -117,7 +123,7 @@ void BinanceAPI::onReplyFinished(QNetworkReply *reply) {
     if (jsonObject.isEmpty() || !jsonObject.contains("data")) {
         if (retryCountMap[symbol] < maxRetries) {
             retryCountMap[symbol]++;
-            setNextProxy(); // Переключаемся на следующий прокси
+            setNextProxy();
             QString url = QString("https://www.binance.com/bapi/asset/v2/public/asset-service/product/get-product-by-symbol?symbol=%1").arg(symbol);
             QNetworkRequest request((QUrl(url)));
             request.setAttribute(QNetworkRequest::User, symbol);
@@ -136,3 +142,5 @@ void BinanceAPI::onReplyFinished(QNetworkReply *reply) {
 void BinanceAPI::setScraper(Scraper *scraper) {
     this->scraper = scraper;
 }
+
+

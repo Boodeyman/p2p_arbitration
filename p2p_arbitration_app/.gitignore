@@ -2,6 +2,7 @@
 # ----------------------------------------------------------------------------
 
 *~
+resources
 build
 users.db
 proxies.txt
@@ -76,8 +77,8 @@ CMakeLists.txt.user*
 *.exe
 
 # Build directories
-build-p2p_arbitration_app-Desktop_arm_darwin_generic_mach_o_64bit-Release/
 build-p2p_arbitration_app-Desktop_arm_darwin_generic_mach_o_64bit-Debug/
+build-p2p_arbitration_app-Desktop_arm_darwin_generic_mach_o_64bit-Release/
 p2p_arbitration_app_autogen/
 
 # CMake generated files

@@ -8,8 +8,9 @@
 #include <QJsonObject>
 #include <QMap>
 #include <QNetworkProxy>
-
-const QString proxiesPath1 = "/Users/artur/p2p_arbitration/p2p_arbitration_app/proxies.txt";
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 class BinanceAPI : public QObject {
     Q_OBJECT
@@ -31,12 +32,13 @@ private:
     void loadProxiesFromFile();
 
     QMap<QString, int> retryCountMap;
-    const int maxRetries = 3;
+    const int maxRetries = 10;
     int pendingRequests;
     Scraper *scraper;
     QNetworkAccessManager *manager;
     QVector<QNetworkProxy> proxyList;
     int currentProxyIndex;
+    QString proxiesPath1;
 };
 
 #endif // BINANCE_H

@@ -3,8 +3,8 @@
 
 #include <QDialog>
 #include <QObject>
-
-class MainWindow;
+#include <QMap>
+#include <QComboBox>
 
 namespace Ui {
 class buycrypto;
@@ -18,12 +18,19 @@ public:
     explicit buycrypto(QWidget *parent = nullptr);
     ~buycrypto();
     void changeTheme(int counter);
+    void updateCryptoData(const QString &symbol, double price, double change, double volume);
 
 private slots:
-    void on_homeButton_clicked();
+    void on_pushButton_clicked();
+    void on_lineEdit_textChanged();
+    void on_cryptoComboBox_currentIndexChanged(int index);
 
 private:
     Ui::buycrypto *ui;
+    QMap<QString, double> cryptoRates;
+    void setupCryptoTable();
+    void setupCryptoComboBox();
+    void updateConversion();
 };
 
 #endif // BUYCRYPTO_H

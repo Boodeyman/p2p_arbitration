@@ -12,6 +12,11 @@ LoginDialog::LoginDialog(QWidget *parent) :
     ui(new Ui::Dialog)
 {
     ui->setupUi(this);
+
+    QString basePath = QCoreApplication::applicationDirPath();
+
+    databasePath = basePath + "/../Resources/users.db";
+
     initializeDatabase();
 
     if (counter % 2 == 0) {
@@ -71,7 +76,7 @@ void LoginDialog::handleLogin() {
     if (query.exec()) {
         if (query.next()) {
             QMessageBox::information(this, "Успешный вход", "Добро пожаловать, " + username + "!");
-            accept(); // Закрывает диалог с успешным результатом
+            accept();
         } else {
             QMessageBox::warning(this, "Ошибка входа", "Неверное имя пользователя или пароль.");
         }
